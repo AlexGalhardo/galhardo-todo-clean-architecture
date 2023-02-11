@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+    todo_pg:
+        image: postgres
+        container_name: todo_pg
+        environment:
+            POSTGRES_PASSWORD: "postgres"
+        ports:
+            - "2222:5432"
+        volumes:
+            - postgres-data:/var/lib/postgresql
+        networks:
+            - todo_network
+
+    # system: postgresql | username: postgres | password: postgres |server: todo_adminer
+    todo_adminer:
+        image: adminer
+        container_name: todo_adminer
+        ports:
+            - "8080:8080"
+        networks:
+            - todo_network
+
+networks:
+    todo_network:
+        driver: bridge
+
+volumes:
+    postgres-data: null
