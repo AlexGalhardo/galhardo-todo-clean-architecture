@@ -3,14 +3,14 @@ import { Request, Response } from "express";
 import { getToDosRepository } from "../../factories/getToDosRepository";
 import { getDecodedJwtToken } from "../../utils/DecodeJwtToken";
 import CreateToDoUseCase from "./CreateToDoUseCase";
-import DeleteTransactionByIdUseCase from "./DeleteToDoByIdUseCase";
-import GetAllTransactionsUseCase from "./GetAllTransactionsUseCase";
+import DeleteToDoByIdUseCase from "./DeleteToDoByIdUseCase";
+import GetAllToDosUseCase from "./GetAllToDosUseCase";
 import GetToDosById from "./GetToDoByIdUseCase";
 import UpdateToDoByIdUseCase from "./UpdateToDoByIdUseCase";
 
 export default class ToDosController {
 	static async getAllTransactions (req: Request, res: Response) {
-		const allTransactions = await new GetAllTransactionsUseCase(getToDosRepository()).execute(
+		const allTransactions = await new GetAllToDosUseCase(getToDosRepository()).execute(
 			getDecodedJwtToken(req).user_id,
 		);
 
@@ -43,7 +43,7 @@ export default class ToDosController {
 		const { title, description, done } = req.body;
 
 		const response = await new UpdateToDoByIdUseCase(getToDosRepository()).execute({
-			id: todo_id,
+			toDoId: todo_id,
 			title,
 			description,
 			done,
@@ -55,7 +55,7 @@ export default class ToDosController {
 	static async deleteToDoById (req: Request, res: Response) {
 		const { todo_id } = req.params;
 
-		const response = await new DeleteTransactionByIdUseCase(getToDosRepository()).execute(todo_id);
+		const response = await new DeleteToDoByIdUseCase(getToDosRepository()).execute(todo_id);
 
 		return res.status(response ? 200 : 400).json(response);
 	}

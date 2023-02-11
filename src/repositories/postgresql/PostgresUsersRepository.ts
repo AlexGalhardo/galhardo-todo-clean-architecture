@@ -20,11 +20,11 @@ export default class PostgresUsersRepository implements IUsersRepository {
 
 		const queryResponse = await prisma.user.create({
 			data: {
-				user_id: newuser_id,
+				id: newuser_id,
 				name,
 				email,
 				password: await Bcrypt.hash(password),
-				jwt_token: jwtToken,
+				jwtToken,
 				created_at: DateTime.getNow(),
 			},
 		});
@@ -40,7 +40,7 @@ export default class PostgresUsersRepository implements IUsersRepository {
 
 		const queryResponse = await prisma.user.update({
 			where: {
-				user_id: updateUserParamsObject.id,
+				id: updateUserParamsObject.id,
 			},
 			data: {
 				name,
@@ -68,11 +68,11 @@ export default class PostgresUsersRepository implements IUsersRepository {
 		return null;
 	}
 
-	async userExists (user_id: string): Promise<boolean> {
+	async userExists (userId: string): Promise<boolean> {
 		try {
 			const userExists = await prisma.user.findUnique({
 				where: {
-					user_id,
+					id: userId,
 				},
 			});
 
@@ -88,10 +88,10 @@ export default class PostgresUsersRepository implements IUsersRepository {
 		return prisma.user.findMany({});
 	}
 
-	async getById (user_id: string): Promise<User | null> {
+	async getById (userId: string): Promise<User | null> {
 		const queryResponse = await prisma.user.findUnique({
 			where: {
-				user_id,
+				id: userId,
 			},
 		});
 
@@ -103,10 +103,10 @@ export default class PostgresUsersRepository implements IUsersRepository {
 		return true;
 	}
 
-	async deleteById (user_id: string): Promise<boolean> {
+	async deleteById (userId: string): Promise<boolean> {
 		const queryResponse = await prisma.user.delete({
 			where: {
-				user_id,
+				id: userId,
 			},
 		});
 
@@ -115,13 +115,13 @@ export default class PostgresUsersRepository implements IUsersRepository {
 		return false;
 	}
 
-	async logout (user_id: string): Promise<boolean> {
+	async logout (userId: string): Promise<boolean> {
 		const queryResponse = await prisma.user.update({
 			where: {
-				user_id,
+				id: userId,
 			},
 			data: {
-				jwt_token: null,
+				jwtToken: null,
 			},
 		});
 

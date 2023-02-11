@@ -1,6 +1,6 @@
 import { IToDosRepository } from "../../ports/IToDosRepository";
 
-export default class DeleteToDoByIdUseCase {
+export default class GetAllToDosUseCase {
 	private readonly toDosRepository: IToDosRepository;
 
 	constructor(toDosRepository: IToDosRepository) {
@@ -8,6 +8,6 @@ export default class DeleteToDoByIdUseCase {
 	}
 
 	async execute (user_id: string) {
-		return this.toDosRepository.deleteById(user_id);
+		return this.toDosRepository.getAll(user_id);
 	}
 }

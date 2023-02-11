@@ -52,7 +52,7 @@ export interface ICreateToDoParams {
 }
 
 export interface IUpdateToDoParams {
-	userId: string;
+	toDoId: string;
 	title: string;
 	description: string;
 	done: boolean;

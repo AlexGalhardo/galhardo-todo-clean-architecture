@@ -20,7 +20,7 @@ describe("testing get all users", () => {
 
 		const response = await request(app)
 			.get("/api/transaction/all")
-			.set("Authorization", `Bearer ${userTestLoginResponse.body.jwt_token}`);
+			.set("Authorization", `Bearer ${userTestLoginResponse.body.jwtToken}`);
 
 		const expected_response = await new PostgresToDosRepository().getAll(USER_TEST_ID as string);
 

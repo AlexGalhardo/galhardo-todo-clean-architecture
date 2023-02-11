@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-import { getDecodedJwtToken } from "../helpers/DecodeJwtToken";
-import PostgresUsersRepository from "../repositories/postgres/PostgresUsersRepository";
+import { getDecodedJwtToken } from "../utils/DecodeJwtToken";
+import PostgresUsersRepository from "../repositories/postgresql/PostgresUsersRepository";
 
 export default interface IUserJwtPayload extends jwt.JwtPayload {
 	user_id: string;

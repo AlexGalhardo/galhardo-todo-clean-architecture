@@ -4,7 +4,7 @@ type UserEntity = {
 	id: string;
 	email: string;
 	name: string;
-	jwt_token: string | null;
+	jwtToken: string | null;
 	password: string;
 	reset_password_token?: string | null;
 	created_at: Date | string | null;
@@ -24,7 +24,7 @@ export type typeUserLoginMethodResponse = {
 	httpStatusCodeResponse: 200 | 400;
 	response: {
 		message: string;
-		jwt_token?: string;
+		jwtToken?: string;
 	};
 };
 

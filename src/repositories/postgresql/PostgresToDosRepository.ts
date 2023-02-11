@@ -15,7 +15,7 @@ import {
 
 export default class PostgresToDosRepository implements IToDosRepository {
 	async getAll (user_id: string): Promise<ToDo[]> {
-		return await prisma.todo.findMany({
+		return await prisma.toDo.findMany({
 			where: {
 				user_id,
 			},
@@ -25,7 +25,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
 	async getById (
 		toDoId: string
 	): Promise<ToDo[]> {
-		return await prisma.todo.findMany({
+		return await prisma.toDo.findMany({
 			where: {
 				id: toDoId,
 			},
@@ -35,21 +35,14 @@ export default class PostgresToDosRepository implements IToDosRepository {
 	async create (toDoParamObject: ICreateToDoParams): Promise<ToDo | null> {
 		const { userId, title, description, done } = toDoParamObject;
 
-		const Account = await prisma.account.findFirst({
-			where: {
-				user_id,
-			},
-		});
-
-		return prisma.todo.update({
-			where: {
-				user_id: userId
-			},
+		return prisma.toDo.create({
 			data: {
+				id: randomUUID(),
+				user_id: userId,
 				title,
 				description,
 				done,
-				updated_at: DateTime.getNow(),
+				created_at: DateTime.getNow(),
 			},
 		});
 	}
@@ -57,7 +50,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
 	async updateById (toDoParamObject: IUpdateToDoParams): Promise<ToDo> {
 		const { toDoId, title, description, done } = toDoParamObject;
 
-		return await prisma.todo.update({
+		return await prisma.toDo.update({
 			where: {
 				id: toDoId,
 			},
@@ -70,7 +63,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
 	}
 
 	async deleteById (toDoId: string): Promise<ToDo> {
-		return await prisma.todo.delete({
+		return await prisma.toDo.delete({
 			where: {
 				id: toDoId,
 			},

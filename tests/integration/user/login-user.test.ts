@@ -5,7 +5,7 @@ import app from "../../../src/app";
 import { HttpStatusCode } from "../../../src/utils/HttpStatusCode";
 
 describe("testing login user", () => {
-	it("it should return http status code 200 with correct json response along with user jwt_token", async () => {
+	it("it should return http status code 200 with correct json response along with user jwtToken", async () => {
 		const response = await request(app)
 			.post("/api/user/login")
 			.send({
