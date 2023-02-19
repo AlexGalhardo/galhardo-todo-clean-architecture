@@ -11,28 +11,28 @@ import routes from "./routes";
 const app = express();
 
 app.use(express.json())
-	.use(cors())
-	.use(compression())
-	.use(helmet({ contentSecurityPolicy: process.env.NODE_ENV === "production" ? undefined : false }))
-	.use("/api", routes)
-	.use((error: Error, request: Request, response: Response, next: NextFunction) => {
-		if (error instanceof Error) {
-			return response.status(400).json({
-				message: error.message,
-			});
-		}
+    .use(cors())
+    .use(compression())
+    .use(helmet({ contentSecurityPolicy: process.env.NODE_ENV === "production" ? undefined : false }))
+    .use("/api", routes)
+    .use((error: Error, request: Request, response: Response, next: NextFunction) => {
+        if (error instanceof Error) {
+            return response.status(400).json({
+                message: error.message,
+            });
+        }
 
-		response.status(500).json({
-			status: "error",
-			message: "Internal Server Error",
-		});
+        response.status(500).json({
+            status: "error",
+            message: "Internal Server Error",
+        });
 
-		return next();
-	})
-	.get("/", (req: Request, res: Response) => {
-		return res.status(200).json({
-			status: "GALHARDO TODO HTTP REST API WORKING!",
-		});
-	});
+        return next();
+    })
+    .get("/", (req: Request, res: Response) => {
+        return res.status(200).json({
+            status: "GALHARDO TODO HTTP REST API WORKING!",
+        });
+    });
 
 export default app;

@@ -3,130 +3,191 @@ import { randomUUID } from "crypto";
 import jwt from "jsonwebtoken";
 
 import prisma from "../../config/prisma";
+import UserEntity from "../../entities/UserEntity";
+import {
+    IUserLoginUseCaseParams,
+    IUserRegisterUseCaseParams,
+    IUsersRepository,
+    IUserUpdateByIdUseCaseParams,
+    UserRepositoryResponse,
+} from "../../ports/IUsersRepository";
 import Bcrypt from "../../utils/Bcrypt";
-import DateTime from "../../utils/DateTime";
-import { IUpdateUserParams, IUsersRepository, registerUserParams } from "../../ports/IUsersRepository";
 
 export default class PostgresUsersRepository implements IUsersRepository {
-	async register (registerUserObject: registerUserParams): Promise<{ userRegistred: User; jwtToken: string } | null> {
-		const { email, name } = registerUserObject;
-		const { password } = registerUserObject;
+    protected getUserEntityFromPrismaUser(queryResponse: User) {
+        return new UserEntity(
+            queryResponse.id,
+            queryResponse.name,
+            queryResponse.email,
+            queryResponse.password,
+            queryResponse.created_at,
+            queryResponse.updated_at,
+        );
+    }
 
-		const newuser_id = randomUUID();
+    async register({ name, email, password }: IUserRegisterUseCaseParams): Promise<UserRepositoryResponse> {
+        const newUserId = randomUUID();
 
-		const jwtToken = jwt.sign({ user_id: newuser_id }, process.env.JWT_SECRET as string, {
-			expiresIn: "24h",
-		});
+        const jwtToken = jwt.sign({ user_id: newUserId }, process.env.JWT_SECRET as string, {
+            expiresIn: "24h",
+        });
 
-		const queryResponse = await prisma.user.create({
-			data: {
-				id: newuser_id,
-				name,
-				email,
-				password: await Bcrypt.hash(password),
-				jwtToken,
-				created_at: DateTime.getNow(),
-			},
-		});
+        const newUser = new UserEntity(newUserId, name, email, await Bcrypt.hash(password), jwtToken);
 
-		return {
-			userRegistred: queryResponse,
-			jwtToken,
-		};
-	}
+        try {
+            const queryResponse = await prisma.user.create({
+                data: {
+                    id: newUser.getId,
+                    name: newUser.getName,
+                    email: newUser.getEmail,
+                    password: newUser.getPassword,
+                    jwt_token: newUser.getJwtToken,
+                    created_at: newUser.getCreatedAt,
+                },
+            });
 
-	async updateById (updateUserParamsObject: IUpdateUserParams): Promise<User> {
-		const { name, email, password } = updateUserParamsObject;
+            if (queryResponse) {
+                return {
+                    success: true,
+                    userEntity: newUser,
+                };
+            }
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
 
-		const queryResponse = await prisma.user.update({
-			where: {
-				id: updateUserParamsObject.id,
-			},
-			data: {
-				name,
-				email,
-				password: await Bcrypt.hash(password),
-			},
-		});
+    async updateById({
+        id,
+        name,
+        email,
+        oldPassword,
+        newPassword,
+    }: IUserUpdateByIdUseCaseParams): Promise<UserRepositoryResponse> {
+        try {
+            const userExists = await prisma.user.findFirst({
+                where: {
+                    email,
+                },
+            });
 
-		return queryResponse;
-	}
+            if (!userExists) {
+                return {
+                    success: false,
+                    error: `A user already exists with this email ${email}`,
+                };
+            }
 
-	async login (email: string, password: string): Promise<User | null> {
-		const user = await prisma.user.findFirst({
-			where: {
-				email,
-			},
-		});
+            const oldPasswordIsCorrect = await Bcrypt.compare(oldPassword, userExists.password);
+            if (!oldPasswordIsCorrect) {
+                return {
+                    success: false,
+                    error: `The old password for user ${email} is not correct`,
+                };
+            }
 
-		if (user) {
-			const passwordIsValid = await Bcrypt.compare(password, user.password);
+            const queryResponse = await prisma.user.update({
+                where: {
+                    id,
+                },
+                data: {
+                    name,
+                    email,
+                    password: await Bcrypt.hash(newPassword),
+                },
+            });
 
-			if (passwordIsValid) return user;
-		}
+            if (queryResponse) {
+                return { success: true, userEntity: this.getUserEntityFromPrismaUser(queryResponse) };
+            }
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
 
-		return null;
-	}
+    async login({ email, password }: IUserLoginUseCaseParams): Promise<UserRepositoryResponse> {
+        try {
+            const queryResponse = await prisma.user.findFirst({ where: { email } });
 
-	async userExists (userId: string): Promise<boolean> {
-		try {
-			const userExists = await prisma.user.findUnique({
-				where: {
-					id: userId,
-				},
-			});
+            if (queryResponse) {
+                const passwordIsValid = await Bcrypt.compare(password, queryResponse.password);
 
-			if (userExists) return true;
+                if (passwordIsValid) {
+                    return {
+                        success: true,
+                        userEntity: this.getUserEntityFromPrismaUser(queryResponse),
+                    };
+                }
+                return { success: false, error: `Password for user ${queryResponse.email} invalid` };
+            }
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
 
-			return false;
-		} catch (error) {
-			throw new Error(error as string);
-		}
-	}
+    async userExists(userId: string): Promise<boolean> {
+        try {
+            const userExists = await prisma.user.findUnique({
+                where: {
+                    id: userId,
+                },
+            });
 
-	async getAll (): Promise<User[] | null> {
-		return prisma.user.findMany({});
-	}
+            if (userExists) return true;
 
-	async getById (userId: string): Promise<User | null> {
-		const queryResponse = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		});
+            return false;
+        } catch (error) {
+            throw new Error(error as string);
+        }
+    }
 
-		return queryResponse;
-	}
+    async getById(userId: string): Promise<UserRepositoryResponse> {
+        try {
+            const queryResponse = await prisma.user.findUnique({
+                where: {
+                    id: userId,
+                },
+            });
 
-	async deleteAll (): Promise<boolean> {
-		await prisma.user.deleteMany({});
-		return true;
-	}
+            if (queryResponse) {
+                return {
+                    success: true,
+                    userEntity: this.getUserEntityFromPrismaUser(queryResponse),
+                };
+            }
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
 
-	async deleteById (userId: string): Promise<boolean> {
-		const queryResponse = await prisma.user.delete({
-			where: {
-				id: userId,
-			},
-		});
+    async deleteById(userId: string): Promise<UserRepositoryResponse> {
+        try {
+            const queryResponse = await prisma.user.delete({
+                where: {
+                    id: userId,
+                },
+            });
 
-		if (queryResponse) return true;
+            if (queryResponse) return { success: true };
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
 
-		return false;
-	}
+    async logout(userId: string): Promise<UserRepositoryResponse> {
+        try {
+            const queryResponse = await prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    jwt_token: null,
+                },
+            });
 
-	async logout (userId: string): Promise<boolean> {
-		const queryResponse = await prisma.user.update({
-			where: {
-				id: userId,
-			},
-			data: {
-				jwtToken: null,
-			},
-		});
-
-		if (queryResponse) return true;
-
-		return false;
-	}
+            if (queryResponse) return { success: true };
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
 }

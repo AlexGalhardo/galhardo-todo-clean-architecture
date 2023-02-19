@@ -1,10 +1,5 @@
-import { IUsersRepository } from "../../ports/IUsersRepository";
-
-interface IUserRegisterParams {
-    name: string;
-    email: string;
-    password: string;
-}
+import UserEntity from "../../entities/UserEntity";
+import { IUserRegisterUseCaseParams, IUsersRepository } from "../../ports/IUsersRepository";
 
 export default class UserRegisterUseCase {
     private readonly usersRepository: IUsersRepository;
@@ -13,11 +8,20 @@ export default class UserRegisterUseCase {
         this.usersRepository = usersRepository;
     }
 
-    async execute({ name, email, password }: IUserRegisterParams) {
-        return this.usersRepository.register({
-            name,
-            email,
-            password,
-        });
+    async execute(userRegisterUseCaseParams: IUserRegisterUseCaseParams) {
+        const repositoryResponse = await this.usersRepository.register(userRegisterUseCaseParams);
+
+        if (repositoryResponse.success) {
+            return {
+                success: true,
+                message: `User ${repositoryResponse.userEntity.getEmail} created successfully`,
+                data: repositoryResponse.userEntity,
+            };
+        }
+
+        return {
+            success: false,
+            error: `${repositoryResponse.error}`,
+        };
     }
 }

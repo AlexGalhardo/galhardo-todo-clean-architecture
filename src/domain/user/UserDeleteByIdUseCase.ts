@@ -7,7 +7,19 @@ export default class UserDeleteByIdUseCase {
         this.usersRepository = usersRepository;
     }
 
-    async execute(user_id: string) {
-        return this.usersRepository.deleteById(user_id);
+    async execute(userId: string) {
+        const repositoryResponse = await this.usersRepository.deleteById(userId);
+
+        if (repositoryResponse.success) {
+            return {
+                success: true,
+                status: `User id ${userId} deleted`,
+            };
+        }
+
+        return {
+            success: false,
+            error: `${repositoryResponse.error}`,
+        };
     }
 }

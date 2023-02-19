@@ -1,100 +1,42 @@
-import { User } from "@prisma/client";
+import UserEntity from "../entities/UserEntity";
 
-type UserEntity = {
-	id: string;
-	email: string;
-	name: string;
-	jwtToken: string | null;
-	password: string;
-	reset_password_token?: string | null;
-	created_at: Date | string | null;
-	updated_at?: Date | string | null;
-};
-
-export type typeUserRegisterMethodResponse = {
-	httpStatusCodeResponse: 201 | 400;
-	response: {
-		message: string;
-		jwtToken?: string;
-		user?: UserEntity;
-	};
-};
-
-export type typeUserLoginMethodResponse = {
-	httpStatusCodeResponse: 200 | 400;
-	response: {
-		message: string;
-		jwtToken?: string;
-	};
-};
-
-export type typeUserLogoutMethodResponse = {
-	httpStatusCodeResponse: 200 | 404;
-	response: {
-		status?: string;
-		error?: string;
-	};
-};
-
-export type typeUserGetAllMethodResponse = {
-	httpStatusCodeResponse: 200;
-	response: UserEntity[];
-};
-
-export type typeUserDeleteAllMethodResponse = {
-	httpStatusCodeResponse: 200;
-	response: UserEntity[];
-};
-
-export type typeUserDeleteByIdMethodResponse = {
-	httpStatusCodeResponse: 200 | 404;
-	response: {
-		status?: string;
-		error?: string;
-	};
-};
-
-export type registerUserParams = {
-	name: string;
-	email: string;
-	password: string;
-};
-
-export interface IUpdateUserParams {
-	id: string;
-	name: string;
-	email: string;
-	password: string;
+export interface UserRepositoryResponse {
+    success: boolean;
+    status?: string;
+    error?: string;
+    userEntity?: UserEntity;
 }
 
-export type typeUserGetByIdMethodResponse = {
-	httpStatusCodeResponse: 200 | 404;
-	response: UserEntity | string;
-};
+export interface IUserRegisterUseCaseParams {
+    name: string;
+    email: string;
+    password: string;
+}
 
-export type typeUserUpdateMethodResponse = {
-	httpStatusCodeResponse: 200 | 404;
-	response: {
-		status?: string;
-		error?: string;
-		user_updated?: UserEntity;
-	};
-};
+export interface IUserLoginUseCaseParams {
+    email: string;
+    password: string;
+}
 
-export type typeUserAddItemToShopCartMethodResponse = {
-	httpStatusCodeResponse: 201 | 400 | 404;
-	response: {
-		status?: string;
-		error?: string;
-		user?: string;
-	};
-};
+export interface IUserUpdateByIdUseCaseParams {
+    id: string;
+    name: string;
+    email: string;
+    oldPassword: string;
+    newPassword: string;
+}
 
 export interface IUsersRepository {
-	register (registerUserObject: registerUserParams): Promise<{ userRegistred: User; jwtToken: string } | null>;
-	updateById (updateUserParamsObject: IUpdateUserParams): Promise<User | null>;
-	login (email: string, password: string): Promise<User | null>;
-	userExists (user_id: string): Promise<boolean>;
-	logout (user_id: string): Promise<boolean>;
-	deleteById (user_id: string): Promise<boolean>;
+    register({ name, email, password }: IUserRegisterUseCaseParams): Promise<UserRepositoryResponse>;
+    updateById({
+        id,
+        name,
+        email,
+        oldPassword,
+        newPassword,
+    }: IUserUpdateByIdUseCaseParams): Promise<UserRepositoryResponse>;
+    login({ email, password }: IUserLoginUseCaseParams): Promise<UserRepositoryResponse>;
+    getById(userId: string): Promise<UserRepositoryResponse>;
+    logout(userId: string): Promise<UserRepositoryResponse>;
+    deleteById(userId: string): Promise<UserRepositoryResponse>;
 }

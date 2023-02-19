@@ -1,9 +1,4 @@
-import { IUsersRepository } from "../../ports/IUsersRepository";
-
-interface ICustomerLoginParams {
-    email: string;
-    password: string;
-}
+import { IUserLoginUseCaseParams, IUsersRepository } from "../../ports/IUsersRepository";
 
 export default class UserLoginUseCase {
     private readonly usersRepository: IUsersRepository;
@@ -12,7 +7,21 @@ export default class UserLoginUseCase {
         this.usersRepository = usersRepository;
     }
 
-    async execute({ email, password }: ICustomerLoginParams) {
-        return this.usersRepository.login(email, password);
+    async execute(userLoginUseCaseParams: IUserLoginUseCaseParams) {
+        const repositoryResponse = await this.usersRepository.login(userLoginUseCaseParams);
+
+        console.log("repositoryResponse => ", repositoryResponse);
+
+        if (repositoryResponse.success) {
+            return {
+                success: true,
+                data: repositoryResponse.userEntity,
+            };
+        }
+
+        return {
+            success: false,
+            error: `${repositoryResponse.error}`,
+        };
     }
 }

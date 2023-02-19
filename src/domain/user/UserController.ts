@@ -1,80 +1,81 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 
 import { getUsersRepository } from "../../factories/getUsersRepository";
 import { getDecodedJwtToken } from "../../utils/DecodeJwtToken";
+import { HttpStatusCode } from "../../utils/HttpStatusCode";
 import UserDeleteByIdUseCase from "./UserDeleteByIdUseCase";
 import UserLoginUseCase from "./UserLoginUseCase";
 import UserLogoutUseCase from "./UserLogoutUseCase";
 import UserRegisterUseCase from "./UserRegisterUseCase";
 import UserUpdateByIdUseCase from "./UserUpdateByIdUseCase";
 
-class UserController {
-	async register (req: Request, res: Response) {
-		const { name, email, password } = req.body;
+export default class UserController {
+    static async register(req: Request, res: Response) {
+        const { name, email, password } = req.body;
 
-		const response = await new UserRegisterUseCase(getUsersRepository()).execute({
-			name,
-			email,
-			password,
-		});
+        const response = await new UserRegisterUseCase(getUsersRepository()).execute({
+            name,
+            email,
+            password,
+        });
 
-		return res.status(201).json(response);
-	}
+        return res
+            .status(response.success ? HttpStatusCode.CREATED : HttpStatusCode.BAD_REQUEST)
+            .json(response.success ? response.data : { success: false, error: response.error });
+    }
 
-	async update (req: Request, res: Response) {
-		const { name, email, password } = req.body;
+    static async update(req: Request, res: Response) {
+        const { name, email, oldPassword, newPassword } = req.body;
 
-		const response = await new UserUpdateByIdUseCase(getUsersRepository()).execute({
-			id: getDecodedJwtToken(req).user_id,
-			name,
-			email,
-			password,
-		});
+        const response = await new UserUpdateByIdUseCase(getUsersRepository()).execute({
+            id: getDecodedJwtToken(req).user_id,
+            name,
+            email,
+            oldPassword,
+            newPassword,
+        });
 
-		return res.status(response ? 200 : 400).json(response);
-	}
+        const { success, data, error } = response;
 
-	async login (req: Request, res: Response) {
-		const { email, password } = req.body;
+        return res
+            .status(success ? HttpStatusCode.CREATED : HttpStatusCode.BAD_REQUEST)
+            .json(success ? { success: true, user: data } : { success: false, error });
+    }
 
-		const user = await new UserLoginUseCase(getUsersRepository()).execute({
-			email,
-			password,
-		});
+    static async login(req: Request, res: Response) {
+        const { email, password } = req.body;
 
-		const jwtToken = jwt.sign(
-			{
-				user_id: user?.id,
-			},
-			process.env.JWT_SECRET as string,
-			{ expiresIn: "1h" },
-		);
+        const response = await new UserLoginUseCase(getUsersRepository()).execute({
+            email,
+            password,
+        });
 
-		return res.status(200).json({
-			success: true,
-			message: `${email} login successfully`,
-			user_id: user?.id,
-			jwtToken: jwtToken,
-		});
-	}
+        const { success, data, error } = response;
 
-	async logout (req: Request, res: Response) {
-		const response = await new UserLogoutUseCase(getUsersRepository()).execute(getDecodedJwtToken(req).user_id);
+        return res
+            .status(success ? HttpStatusCode.CREATED : HttpStatusCode.BAD_REQUEST)
+            .json(success ? { success: true, user: data } : { success: false, error });
+    }
 
-		return res.status(response ? 200 : 400).json({
-			success: true,
-			message: `logout successfully`,
-		});
-	}
+    static async logout(req: Request, res: Response) {
+        const response = await new UserLogoutUseCase(getUsersRepository()).execute(getDecodedJwtToken(req).user_id);
 
-	async deleteById (req: Request, res: Response) {
-		const { user_id } = req.params;
+        const { success, status, error } = response;
 
-		const response = await new UserDeleteByIdUseCase(getUsersRepository()).execute(user_id);
+        return res
+            .status(success ? HttpStatusCode.CREATED : HttpStatusCode.BAD_REQUEST)
+            .json(success ? { success: true, status } : { success: false, error });
+    }
 
-		return res.status(response ? 200 : 400).json(response);
-	}
+    static async deleteById(req: Request, res: Response) {
+        const { user_id } = req.params;
+
+        const response = await new UserDeleteByIdUseCase(getUsersRepository()).execute(user_id);
+
+        const { success, status, error } = response;
+
+        return res
+            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
+            .json(success ? { success: true, status } : { success: false, error });
+    }
 }
-
-export default new UserController();

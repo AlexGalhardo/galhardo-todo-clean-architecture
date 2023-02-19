@@ -1,13 +1,13 @@
 import { IToDosRepository } from "../../ports/IToDosRepository";
 
 export default class GetToDoByIdUseCase {
-	private readonly toDosRepository: IToDosRepository;
+    private readonly toDosRepository: IToDosRepository;
 
-	constructor(transactionsRepository: IToDosRepository) {
-		this.toDosRepository = transactionsRepository;
-	}
+    constructor(transactionsRepository: IToDosRepository) {
+        this.toDosRepository = transactionsRepository;
+    }
 
-	async execute (toDoId: string) {
-		return this.toDosRepository.getById(toDoId);
-	}
+    async execute(toDoId: string) {
+        return await this.toDosRepository.getById(toDoId);
+    }
 }

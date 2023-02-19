@@ -12,7 +12,7 @@ model User {
     name       String
     email      String  @unique
     password   String
-    jwtToken   String?
+    jwt_token  String?
     created_at String
     updated_at String?
     ToDo       ToDo[]
