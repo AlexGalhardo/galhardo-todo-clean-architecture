@@ -16,7 +16,7 @@
 		"watch:compile": "npm run delete:build && swc src -w --out-dir dist",
 		"watch:dev": "npx nodemon ./dist/server.js",
 		"build": "npm run delete:build && swc src -d dist",
-		"vitest": "vitest",
+		"test": "vitest",
 		"vitest:coverage": "vitest run --coverage",
 		"fix:prettier": "npx prettier --write src/*.ts src/**/*.ts src/**/**/*.ts src/**/**/**/*.ts tests/**/*.ts",
 		"fix:lint": "npx eslint . --fix",
