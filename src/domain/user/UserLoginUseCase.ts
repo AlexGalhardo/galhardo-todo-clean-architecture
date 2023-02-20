@@ -1,3 +1,4 @@
+import Bcrypt from "../../utils/Bcrypt";
 import { IUserLoginUseCaseParams, IUsersRepository } from "../../ports/IUsersRepository";
 
 export default class UserLoginUseCase {
@@ -7,19 +8,27 @@ export default class UserLoginUseCase {
 		this.usersRepository = usersRepository;
 	}
 
-	async execute (userLoginUseCaseParams: IUserLoginUseCaseParams) {
-		const repositoryResponse = await this.usersRepository.login(userLoginUseCaseParams);
+	async execute ({ email, password }: IUserLoginUseCaseParams) {
+		try {
+			const { userEntity } = await this.usersRepository.getUserEntityByEmail(email)
 
-		if (repositoryResponse.success) {
+			if (userEntity) {
+				const passwordIsValid = await Bcrypt.compare(password, userEntity.getPassword);
+				if (passwordIsValid) {
+					userEntity.setJwtToken()
+					await this.usersRepository.save(userEntity)
+					return {
+						success: true,
+						data: userEntity,
+					};
+				}
+			}
+		}
+		catch (error) {
 			return {
-				success: true,
-				data: repositoryResponse.userEntity,
+				success: false,
+				error: `${error}`,
 			};
 		}
-
-		return {
-			success: false,
-			error: `${repositoryResponse.error}`,
-		};
 	}
 }

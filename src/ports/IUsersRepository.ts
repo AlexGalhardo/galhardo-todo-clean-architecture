@@ -27,16 +27,10 @@ export interface IUserUpdateByIdUseCaseParams {
 }
 
 export interface IUsersRepository {
-	register ({ name, email, password }: IUserRegisterUseCaseParams): Promise<UserRepositoryResponse>;
-	updateById ({
-		id,
-		newName,
-		newEmail,
-		olderPassword,
-		newPassword,
-	}: IUserUpdateByIdUseCaseParams): Promise<UserRepositoryResponse>;
-	login ({ email, password }: IUserLoginUseCaseParams): Promise<UserRepositoryResponse>;
-	getById (userId: string): Promise<UserRepositoryResponse>;
+	create (user: UserEntity): Promise<UserRepositoryResponse>;
+	save (user: UserEntity): Promise<UserRepositoryResponse>;
+	getUserEntityById (userId: string): Promise<UserRepositoryResponse>;
+	getUserEntityByEmail (userEmail: string): Promise<UserRepositoryResponse>;
 	logout (userId: string): Promise<UserRepositoryResponse>;
 	deleteById (userId: string): Promise<UserRepositoryResponse>;
 }

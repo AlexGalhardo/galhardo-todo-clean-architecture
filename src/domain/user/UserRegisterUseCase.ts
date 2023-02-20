@@ -1,27 +1,30 @@
+import { randomUUID } from "node:crypto";
 import UserEntity from "../../entities/UserEntity";
 import { IUserRegisterUseCaseParams, IUsersRepository } from "../../ports/IUsersRepository";
 
 export default class UserRegisterUseCase {
-    private readonly usersRepository: IUsersRepository;
+	private readonly usersRepository: IUsersRepository;
 
-    constructor(usersRepository: IUsersRepository) {
-        this.usersRepository = usersRepository;
-    }
+	constructor(usersRepository: IUsersRepository) {
+		this.usersRepository = usersRepository;
+	}
 
-    async execute(userRegisterUseCaseParams: IUserRegisterUseCaseParams) {
-        const repositoryResponse = await this.usersRepository.register(userRegisterUseCaseParams);
+	async execute ({ name, email, password }: IUserRegisterUseCaseParams) {
+		const newUser = await UserEntity.init(randomUUID(), name, email, password);
 
-        if (repositoryResponse.success) {
-            return {
-                success: true,
-                message: `User ${repositoryResponse.userEntity.getEmail} created successfully`,
-                data: repositoryResponse.userEntity,
-            };
-        }
+		const { success, userEntity, error } = await this.usersRepository.create(newUser);
 
-        return {
-            success: false,
-            error: `${repositoryResponse.error}`,
-        };
-    }
+		if (success) {
+			return {
+				success: true,
+				message: `User ${userEntity.getEmail} created successfully`,
+				data: userEntity,
+			};
+		}
+
+		return {
+			success: false,
+			error: `${error}`,
+		};
+	}
 }

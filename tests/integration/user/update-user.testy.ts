@@ -42,7 +42,7 @@ describe("testing register user", () => {
 		expect(response.body.user.id).toBeDefined();
 		expect(response.body.user.name).toMatchObject(updatedUser.newName);
 		expect(response.body.user.email).toMatchObject(updatedUser.newEmail);
-		expect(response.body.user.updatedAt).toBeTruthy();
+		expect(response.body.user.updatedAt).toBeDefined();
 
 		afterAll(async () => {
 			const response = await request(app)

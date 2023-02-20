@@ -24,7 +24,6 @@ describe("testing delete user by id", () => {
 
 		const response = await request(app)
 			.delete(`/api/user/delete/${createdUser.body.id}`)
-			.send(userObject)
 			.set("Content-Type", "application/json")
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${createdUser.body.jwtToken}`);
