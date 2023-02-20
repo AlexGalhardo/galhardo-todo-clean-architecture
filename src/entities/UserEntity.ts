@@ -25,14 +25,7 @@ export default class UserEntity {
         this.toDos = toDos;
     }
 
-    static async init(
-        id: string,
-        name: string,
-        email: string,
-        password: string,
-        createdAt: string = DateTime.getNow,
-        updatedAt: string | null = null,
-    ) {
+    static async init(id: string, name: string, email: string, password: string) {
         const hashPassword = await Bcrypt.hash(password);
         return new UserEntity(id, name, email, hashPassword);
     }

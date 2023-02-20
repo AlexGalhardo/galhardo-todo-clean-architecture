@@ -5,12 +5,16 @@ import ToDoEntity from "../../../src/entities/ToDoEntity";
 
 describe("testing toDo entity", async () => {
     it("it should create toDo entity with correct properties response", async () => {
+        const firstUserId = randomUUID();
+        const secondUserId = randomUUID();
+
         const firstToDoId = randomUUID();
         const secondToDoId = randomUUID();
 
-        const firstToDo = new ToDoEntity(firstToDoId, "first todo", "first description", true);
+        const firstToDo = new ToDoEntity(firstToDoId, firstUserId, "first todo", "first description", true);
 
         expect(firstToDo.getId).toBe(firstToDoId);
+        expect(firstToDo.getUserId).toBe(firstUserId);
         expect(firstToDo.getTitle).toBe("first todo");
         expect(firstToDo.getDescription).toBe("first description");
         expect(firstToDo.getDone).toBeTruthy();
@@ -27,9 +31,10 @@ describe("testing toDo entity", async () => {
         expect(firstToDo.getDone).toBeFalsy();
         expect(firstToDo.getUpdatedAt).toBeDefined();
 
-        const secondTodo = new ToDoEntity(secondToDoId, "second todo", "second description");
+        const secondTodo = new ToDoEntity(secondToDoId, secondUserId, "second todo", "second description");
 
         expect(secondTodo.getId).toBe(secondToDoId);
+        expect(secondTodo.getUserId).toBe(secondUserId);
         expect(secondTodo.getTitle).toBe("second todo");
         expect(secondTodo.getDescription).toBe("second description");
         expect(secondTodo.getDone).toBeFalsy();

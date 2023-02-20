@@ -11,7 +11,7 @@ export default class GetAllToDosUseCase {
             if (success) {
                 return {
                     success: true,
-                    data: toDosEntities,
+                    toDos: toDosEntities,
                 };
             }
         } catch (error) {

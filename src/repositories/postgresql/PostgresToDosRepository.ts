@@ -1,10 +1,9 @@
 import { ToDo } from "@prisma/client";
 import { randomUUID } from "crypto";
-import ToDoEntity from "src/entities/ToDoEntity";
 
 import prisma from "../../config/prisma";
+import ToDoEntity from "../../entities/ToDoEntity";
 import { IToDosRepository, ToDoRepositoryResponse } from "../../ports/IToDosRepository";
-import DateTime from "../../utils/DateTime";
 
 export default class PostgresToDosRepository implements IToDosRepository {
     private getToDoEntityFromPrismaToDo(queryResponse: ToDo) {
@@ -88,11 +87,11 @@ export default class PostgresToDosRepository implements IToDosRepository {
             const toDo = await prisma.toDo.create({
                 data: {
                     id: randomUUID(),
-                    user_id: userId,
-                    title,
-                    description,
-                    done,
-                    created_at: DateTime.getNow,
+                    user_id: newToDo.getUserId,
+                    title: newToDo.getTitle,
+                    description: newToDo.getDescription,
+                    done: newToDo.getDone,
+                    created_at: newToDo.getCreatedAt,
                 },
             });
 
@@ -111,18 +110,22 @@ export default class PostgresToDosRepository implements IToDosRepository {
     }
 
     async save(toDo: ToDoEntity): Promise<ToDoRepositoryResponse> {
-        const { toDoId, title, description, done } = toDoParamObject;
+        try {
+            const queryResponse = await prisma.toDo.update({
+                where: {
+                    id: toDo.getId,
+                },
+                data: {
+                    title: toDo.getTitle,
+                    description: toDo.getDescription,
+                    done: toDo.getDone,
+                },
+            });
 
-        return await prisma.toDo.update({
-            where: {
-                id: toDoId,
-            },
-            data: {
-                title,
-                description,
-                done,
-            },
-        });
+            if (queryResponse) return { success: true, toDoEntity: this.getToDoEntityFromPrismaToDo(queryResponse) };
+        } catch (error) {
+            return { success: false, error };
+        }
     }
 
     async deleteById(toDoId: string): Promise<ToDoRepositoryResponse> {

@@ -16,9 +16,9 @@ describe("testing user entity", async () => {
         const secondToDoId = randomUUID();
         const thirdToDoId = randomUUID();
 
-        const firstTodo = new ToDoEntity(firstToDoId, "first todo", "first description", true);
-        const secondTodo = new ToDoEntity(secondToDoId, "first todo", "first description");
-        const thirdTodo = new ToDoEntity(thirdToDoId, "first todo", "first description", true);
+        const firstTodo = new ToDoEntity(firstToDoId, userId, "first todo", "first description", true);
+        const secondTodo = new ToDoEntity(secondToDoId, userId, "first todo", "first description");
+        const thirdTodo = new ToDoEntity(thirdToDoId, userId, "first todo", "first description", true);
 
         user.addToDo(firstTodo);
         user.addToDo(secondTodo);
@@ -32,10 +32,10 @@ describe("testing user entity", async () => {
         expect(user.getCreatedAt).toBeDefined();
         expect(user.getUpdatedAt).toBeNull();
 
-        expect(user.getToDoById(firstToDoId).getId).toBe(firstToDoId);
-        expect(user.getToDoById(secondToDoId).getId).toBe(secondToDoId);
-        expect(user.getToDoById(thirdToDoId).getId).toBe(thirdToDoId);
+        expect(user.getToDoById(firstToDoId)?.getId).toBe(firstToDoId);
+        expect(user.getToDoById(secondToDoId)?.getId).toBe(secondToDoId);
+        expect(user.getToDoById(thirdToDoId)?.getId).toBe(thirdToDoId);
 
-        expect(user.getAllTodos()).toStrictEqual([firstTodo, secondTodo, thirdTodo]);
+        expect(user.getAllTodos).toStrictEqual([firstTodo, secondTodo, thirdTodo]);
     });
 });

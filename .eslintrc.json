@@ -19,16 +19,22 @@
 		"eslint-plugin-import-helpers",
 		"prettier"
 	],
+	"ignorePatterns": [
+		"node_modules/",
+		"dist/"
+	],
 	"rules": {
 		"indent": [
 			"error",
 			4
 		],
 		"camelcase": "off",
+		"consistent-return": "off",
+		"no-plusplus": "off",
 		"prettier/prettier": "error",
 		"import/no-unresolved": "error",
 		"@typescript-eslint/naming-convention": [
-			"error",
+			"off",
 			{
 				"selector": "interface",
 				"format": [
@@ -55,7 +61,7 @@
 			}
 		],
 		"import-helpers/order-imports": [
-			"warn",
+			"error",
 			{
 				"newlinesBetween": "always",
 				"groups": [

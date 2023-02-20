@@ -6,7 +6,7 @@ export default class UpdateToDoByIdUseCase {
 
     async execute({ id, title, description, done }: IUpdateToDoByIdUseCaseParams) {
         try {
-            const { success, toDoEntity } = await this.toDosRepository.getById(id);
+            const { success, toDoEntity, error } = await this.toDosRepository.getById(id);
 
             if (success) {
                 toDoEntity.setTitle(title);
@@ -19,10 +19,15 @@ export default class UpdateToDoByIdUseCase {
                 if (success) {
                     return {
                         success: true,
-                        data: toDoEntity,
+                        toDo: toDoEntity,
                     };
                 }
             }
+            console.log("CHEGOU AQUI");
+            return {
+                success: false,
+                error,
+            };
         } catch (error) {
             return {
                 success: false,

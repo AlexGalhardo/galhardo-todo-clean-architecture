@@ -27,7 +27,7 @@ model ToDo {
     done        Boolean @default(false)
 
     user_id String
-    user    User   @relation(fields: [user_id], references: [id])
+    user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
     created_at String
     updated_at String?

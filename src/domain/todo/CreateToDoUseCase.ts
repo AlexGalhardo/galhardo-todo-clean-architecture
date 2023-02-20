@@ -16,7 +16,7 @@ export default class CreateToDoUseCase {
             if (success) {
                 return {
                     success: true,
-                    data: toDoEntity,
+                    toDo: toDoEntity,
                 };
             }
         } catch (error) {

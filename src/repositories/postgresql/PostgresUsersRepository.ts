@@ -4,26 +4,8 @@ import prisma from "../../config/prisma";
 import UserEntity from "../../entities/UserEntity";
 import { IUsersRepository, UserRepositoryResponse } from "../../ports/IUsersRepository";
 
-interface PrismaUserWithToDos {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    jwt_token: string;
-    created_at: string;
-    updated_at: string;
-    ToDos: {
-        id: string;
-        created_at: string;
-        updated_at: string;
-        title: string;
-        description: string;
-        done: boolean;
-    }[];
-}
-
 export default class PostgresUsersRepository implements IUsersRepository {
-    private getUserEntityFromPrismaUser(queryResponse) {
+    private getUserEntityFromPrismaUser(queryResponse: User) {
         return new UserEntity(
             queryResponse.id,
             queryResponse.name,
@@ -31,7 +13,6 @@ export default class PostgresUsersRepository implements IUsersRepository {
             queryResponse.password,
             queryResponse.created_at,
             queryResponse.updated_at,
-            queryResponse.ToDos,
         );
     }
 
@@ -92,25 +73,6 @@ export default class PostgresUsersRepository implements IUsersRepository {
                 where: {
                     id: userId,
                 },
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    password: true,
-                    jwt_token: true,
-                    created_at: true,
-                    updated_at: true,
-                    ToDo: {
-                        select: {
-                            id: true,
-                            title: true,
-                            description: true,
-                            done: true,
-                            created_at: true,
-                            updated_at: true,
-                        },
-                    },
-                },
             });
             if (user) return { success: true, userEntity: this.getUserEntityFromPrismaUser(user) };
         } catch (error) {
@@ -123,25 +85,6 @@ export default class PostgresUsersRepository implements IUsersRepository {
             const user = await prisma.user.findUnique({
                 where: {
                     email: userEmail,
-                },
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    password: true,
-                    jwt_token: true,
-                    created_at: true,
-                    updated_at: true,
-                    ToDo: {
-                        select: {
-                            id: true,
-                            title: true,
-                            description: true,
-                            done: true,
-                            created_at: true,
-                            updated_at: true,
-                        },
-                    },
                 },
             });
 

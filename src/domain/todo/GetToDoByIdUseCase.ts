@@ -1,5 +1,4 @@
-import { getToDosRepository } from "src/factories/getToDosRepository";
-
+import { getToDosRepository } from "../../factories/getToDosRepository";
 import { IToDosRepository } from "../../ports/IToDosRepository";
 
 export default class GetToDoByIdUseCase {
@@ -12,7 +11,7 @@ export default class GetToDoByIdUseCase {
             if (success) {
                 return {
                     success: true,
-                    data: toDoEntity,
+                    toDo: toDoEntity,
                 };
             }
         } catch (error) {

@@ -4,7 +4,6 @@ src/logs/all-logs.log
 
 package-lock.json
 
-# prisma
 prisma/migrations/*
 
 # *.log
