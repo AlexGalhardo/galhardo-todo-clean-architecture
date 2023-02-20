@@ -1,13 +1,29 @@
-import { ICreateToDoParams, IToDosRepository } from "../../ports/IToDosRepository";
+import { randomUUID } from "node:crypto";
+
+import ToDoEntity from "../../entities/ToDoEntity";
+import { getToDosRepository } from "../../factories/getToDosRepository";
+import { ICreateToDoUseCaseParams, IToDosRepository } from "../../ports/IToDosRepository";
 
 export default class CreateToDoUseCase {
-    private readonly toDosRepository: IToDosRepository;
+    constructor(private readonly toDosRepository: IToDosRepository = getToDosRepository()) {}
 
-    constructor(toDosRepository: IToDosRepository) {
-        this.toDosRepository = toDosRepository;
-    }
+    async execute({ userId, title, description, done }: ICreateToDoUseCaseParams) {
+        try {
+            const newToDo = new ToDoEntity(randomUUID(), userId, title, description, done);
 
-    async execute(toDoParamObject: ICreateToDoParams) {
-        return this.toDosRepository.create(toDoParamObject);
+            const { success, toDoEntity } = await this.toDosRepository.create(newToDo);
+
+            if (success) {
+                return {
+                    success: true,
+                    data: toDoEntity,
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                error,
+            };
+        }
     }
 }

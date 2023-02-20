@@ -1,25 +1,22 @@
+import { getUsersRepository } from "../../factories/getUsersRepository";
 import { IUsersRepository } from "../../ports/IUsersRepository";
 
 export default class UserDeleteByIdUseCase {
-	private readonly usersRepository: IUsersRepository;
+    constructor(private readonly usersRepository: IUsersRepository = getUsersRepository()) {}
 
-	constructor(usersRepository: IUsersRepository) {
-		this.usersRepository = usersRepository;
-	}
+    async execute(userId: string) {
+        const { success, error } = await this.usersRepository.deleteById(userId);
 
-	async execute (userId: string) {
-		const { success, error } = await this.usersRepository.deleteById(userId);
+        if (success) {
+            return {
+                success: true,
+                status: `User id ${userId} deleted`,
+            };
+        }
 
-		if (success) {
-			return {
-				success: true,
-				status: `User id ${userId} deleted`,
-			};
-		}
-
-		return {
-			success: false,
-			error: `${error}`,
-		};
-	}
+        return {
+            success: false,
+            error: `${error}`,
+        };
+    }
 }

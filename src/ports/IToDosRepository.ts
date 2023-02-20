@@ -1,79 +1,35 @@
-import { ToDo } from "@prisma/client";
-import ToDoEntity from "src/entities/ToDoEntity";
+import ToDoEntity from "../entities/ToDoEntity";
 
-export interface IToDoCreateUseCaseResponse {
-	httpStatusCodeResponse: 201 | 400;
-	response: {
-		success: boolean;
-		message: "ToDo Created!" | "ToDo NOT Created!";
-		data?: ToDo;
-	};
+export interface ICreateToDoUseCaseParams {
+    userId: string;
+    title: string;
+    description: string;
+    done: boolean;
 }
 
-export interface IToDoDeleteByIdUseCaseResponse {
-	httpStatusCodeResponse: 200 | 404;
-	response: {
-		success: boolean;
-		message: string;
-	};
-}
-
-export interface IToDoGetAllUseCaseResponse {
-	httpStatusCodeResponse: 200 | 404;
-	response: {
-		success: boolean;
-		message: string;
-		data?: ToDo[];
-	};
-}
-
-export interface IUpdateToDoByIdResponse {
-	httpStatusCodeResponse: 200 | 404;
-	response: {
-		success: boolean;
-		message: string;
-		data?: ToDo;
-	};
-}
-
-export interface IToDoUpdateByIdUseCaseResponse {
-	httpStatusCodeResponse: 200 | 404;
-	response: {
-		success: boolean;
-		message: string;
-		blogUpdated?: ToDo;
-	};
-}
-
-export interface ICreateToDoParams {
-	userId: string;
-	title: string;
-	description: string;
-	done: boolean;
-}
-
-export interface IUpdateToDoParams {
-	toDoId: string;
-	title: string;
-	description: string;
-	done: boolean;
+export interface IUpdateToDoByIdUseCaseParams {
+    id: string;
+    title: string;
+    description: string;
+    done: boolean;
 }
 
 export interface ToDoRepositoryResponse {
-	success: boolean
-	status?: string
-	toDoEntity?: ToDoEntity
-	error?: string
+    success: boolean;
+    status?: string;
+    toDoEntity?: ToDoEntity;
+    toDosEntities?: ToDoEntity[];
+    error?: string;
 }
 
 export interface IToDosRepository {
-	getAll (userId: string): Promise<ToDo[]>;
+    getAllByUserId(userId: string): Promise<ToDoRepositoryResponse>;
 
-	getToDoEntityById (toDoId: string): Promise<ToDoRepositoryResponse>
+    getById(toDoId: string): Promise<ToDoRepositoryResponse>;
 
-	create (toDoParamObject: ICreateToDoParams): Promise<ToDo | null>;
+    create(newToDo: ToDoEntity): Promise<ToDoRepositoryResponse>;
 
-	updateById (toDoParamObject: IUpdateToDoParams): Promise<ToDo>;
+    save(newToDo: ToDoEntity): Promise<ToDoRepositoryResponse>;
 
-	deleteById (toDoId: string): Promise<ToDo>;
+    deleteById(toDoId: string): Promise<ToDoRepositoryResponse>;
 }

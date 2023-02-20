@@ -1,13 +1,33 @@
-import { IToDosRepository, IUpdateToDoParams } from "../../ports/IToDosRepository";
+import { getToDosRepository } from "../../factories/getToDosRepository";
+import { IToDosRepository, IUpdateToDoByIdUseCaseParams } from "../../ports/IToDosRepository";
 
 export default class UpdateToDoByIdUseCase {
-    private readonly toDosRepository: IToDosRepository;
+    constructor(private readonly toDosRepository: IToDosRepository = getToDosRepository()) {}
 
-    constructor(toDosRepository: IToDosRepository) {
-        this.toDosRepository = toDosRepository;
-    }
+    async execute({ id, title, description, done }: IUpdateToDoByIdUseCaseParams) {
+        try {
+            const { success, toDoEntity } = await this.toDosRepository.getById(id);
 
-    async execute(toDoParamObject: IUpdateToDoParams) {
-        return this.toDosRepository.updateById(toDoParamObject);
+            if (success) {
+                toDoEntity.setTitle(title);
+                toDoEntity.setDescription(description);
+                toDoEntity.setDone(done);
+                toDoEntity.setUpdatedAt();
+
+                const { success } = await this.toDosRepository.save(toDoEntity);
+
+                if (success) {
+                    return {
+                        success: true,
+                        data: toDoEntity,
+                    };
+                }
+            }
+        } catch (error) {
+            return {
+                success: false,
+                error,
+            };
+        }
     }
 }

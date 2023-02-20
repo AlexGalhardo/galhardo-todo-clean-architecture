@@ -1,27 +1,25 @@
 import { getToDosRepository } from "src/factories/getToDosRepository";
+
 import { IToDosRepository } from "../../ports/IToDosRepository";
 
 export default class GetToDoByIdUseCase {
-	constructor(private readonly toDosRepository: IToDosRepository) {
-		this.toDosRepository = getToDosRepository()
-	}
+    constructor(private readonly toDosRepository: IToDosRepository = getToDosRepository()) {}
 
-	async execute (toDoId: string) {
-		try {
-			const { toDoEntity } = await this.toDosRepository.getToDoEntityById(toDoId)
+    async execute(toDoId: string) {
+        try {
+            const { success, toDoEntity } = await this.toDosRepository.getById(toDoId);
 
-			if (toDoEntity) {
-				return {
-					success: true,
-					data: userEntity.getAllTodos
-				}
-			}
-		}
-		catch (error) {
-			return {
-				success: false,
-				error
-			}
-		}
-	}
+            if (success) {
+                return {
+                    success: true,
+                    data: toDoEntity,
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                error,
+            };
+        }
+    }
 }

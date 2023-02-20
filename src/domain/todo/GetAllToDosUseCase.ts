@@ -1,14 +1,24 @@
-import { getUsersRepository } from "src/factories/getUsersRepository";
-import { IUsersRepository } from "src/ports/IUsersRepository";
+import { getToDosRepository } from "../../factories/getToDosRepository";
+import { IToDosRepository } from "../../ports/IToDosRepository";
 
 export default class GetAllToDosUseCase {
-	private readonly usersRepository: IUsersRepository;
+    constructor(private readonly toDosRepository: IToDosRepository = getToDosRepository()) {}
 
-	constructor() {
-		this.usersRepository = getUsersRepository();
-	}
+    async execute(userId: string) {
+        try {
+            const { success, toDosEntities } = await this.toDosRepository.getAllByUserId(userId);
 
-	async execute (userId: string) {
-		const { userEntity } = await this.usersRepository.getUserEntityById(userId)
-	}
+            if (success) {
+                return {
+                    success: true,
+                    data: toDosEntities,
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                error,
+            };
+        }
+    }
 }

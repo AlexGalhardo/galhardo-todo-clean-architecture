@@ -1,13 +1,23 @@
+import { getToDosRepository } from "../../factories/getToDosRepository";
 import { IToDosRepository } from "../../ports/IToDosRepository";
 
 export default class DeleteToDoByIdUseCase {
-    private readonly toDosRepository: IToDosRepository;
+    constructor(private readonly toDosRepository: IToDosRepository = getToDosRepository()) {}
 
-    constructor(toDosRepository: IToDosRepository) {
-        this.toDosRepository = toDosRepository;
-    }
+    async execute(toDoId: string) {
+        try {
+            const { success } = await this.toDosRepository.deleteById(toDoId);
 
-    async execute(user_id: string) {
-        return await this.toDosRepository.deleteById(user_id);
+            if (success) {
+                return {
+                    success: true,
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                error,
+            };
+        }
     }
 }
