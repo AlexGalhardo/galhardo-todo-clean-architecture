@@ -6,7 +6,7 @@ import ToDoEntity from "../../entities/ToDoEntity";
 import { IToDosRepository, ToDoRepositoryResponse } from "../../ports/IToDosRepository";
 
 export default class PostgresToDosRepository implements IToDosRepository {
-    private getToDoEntityFromPrismaToDo (queryResponse: ToDo) {
+    private getToDoEntityFromPrismaToDo(queryResponse: ToDo) {
         return new ToDoEntity(
             queryResponse.id,
             queryResponse.user_id,
@@ -18,7 +18,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
         );
     }
 
-    private getToDoSEntitiesFromPrismaToDos (queryResponse: ToDo[]) {
+    private getToDoSEntitiesFromPrismaToDos(queryResponse: ToDo[]) {
         const toDoesEntities: ToDoEntity[] = [];
 
         queryResponse.forEach((todo: ToDo) => {
@@ -38,7 +38,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
         return toDoesEntities;
     }
 
-    async getAllByUserId (userId: string): Promise<ToDoRepositoryResponse> {
+    async getAllByUserId(userId: string): Promise<ToDoRepositoryResponse> {
         try {
             const allToDosFound = await prisma.toDo.findMany({
                 where: {
@@ -60,7 +60,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
         }
     }
 
-    async getById (toDoId: string): Promise<ToDoRepositoryResponse> {
+    async getById(toDoId: string): Promise<ToDoRepositoryResponse> {
         try {
             const toDo = await prisma.toDo.findUnique({
                 where: {
@@ -82,7 +82,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
         }
     }
 
-    async create (newToDo: ToDoEntity): Promise<ToDoRepositoryResponse> {
+    async create(newToDo: ToDoEntity): Promise<ToDoRepositoryResponse> {
         try {
             const toDo = await prisma.toDo.create({
                 data: {
@@ -109,7 +109,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
         }
     }
 
-    async save (toDo: ToDoEntity): Promise<ToDoRepositoryResponse> {
+    async save(toDo: ToDoEntity): Promise<ToDoRepositoryResponse> {
         try {
             const queryResponse = await prisma.toDo.update({
                 where: {
@@ -128,7 +128,7 @@ export default class PostgresToDosRepository implements IToDosRepository {
         }
     }
 
-    async deleteById (toDoId: string): Promise<ToDoRepositoryResponse> {
+    async deleteById(toDoId: string): Promise<ToDoRepositoryResponse> {
         try {
             const queryResponse = await prisma.toDo.delete({
                 where: {
