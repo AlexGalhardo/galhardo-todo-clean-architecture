@@ -2,9 +2,9 @@ version: '3'
 
 services:
 
-    todo_pg:
+    todo_postgres:
         image: postgres
-        container_name: todo_pg
+        container_name: todo_postgres
         environment:
             POSTGRES_PASSWORD: "postgres"
         ports:
