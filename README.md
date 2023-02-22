@@ -47,7 +47,9 @@ Essa codebase possui uma API REST usando princípios de arquitetura limpa para s
    docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' todo_postgres
    ```
 6. Atualize o servidor da variável de ambiente DATABASE_URL no arquivo `.env`, como no exemplo abaixo:
-   - DATABASE_URL="postgresql://postgres:postgres@172.29.0.2:5432/todo_api?schema=public"
+   ```
+   DATABASE_URL="postgresql://postgres:postgres@172.29.0.2:5432/todo_api?schema=public"
+   ```
 7. Gere o client do prisma:
    ```
    npx prisma generate
