@@ -1,6 +1,8 @@
 # API todo-api-clean-architecture
 
-Essa codebase possui uma API REST usando princípios de arquitetura limpa para ser usado como um boilerplate na construção de uma nova API REST
+https://user-images.githubusercontent.com/19540357/220719853-05dbb792-3741-4632-bc6e-508053f203c3.mp4
+
+Essa codebase possui uma API REST usando princípios de arquitetura limpa para ser usado como um boilerplate
 
 - <b>Endpoint Produção: #</b>
 - <b>Endpoint Staging: # </b>
@@ -23,8 +25,10 @@ Essa codebase possui uma API REST usando princípios de arquitetura limpa para s
 
 ## Documentação dessa API
 - Existe um arquivo na raíz desse código chamado: `INSOMNIA-todo-api-clean-architecture-http-requests.json`
-- Importe esse arquivo no client do Insomnia para ver como a API funciona
-- Baixar Insomnia Client: https://insomnia.rest/
+- Importe esse arquivo no client do Insomnia para ver como os endpoints dessa API funciona
+- Para baixar o Insomnia Client: https://insomnia.rest/
+
+![documentacao-todo-api-insomnia](https://user-images.githubusercontent.com/19540357/220719844-d4b026e1-5380-4a7e-ae44-5540ed95e0b4.png)
 
 ## Instalação e Setup Local
 
