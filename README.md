@@ -2,7 +2,7 @@
 
 Essa codebase possui uma API REST usando princípios de arquitetura limpa para ser usado como um boilerplate na construção de uma nova API REST
 
-- <b>Endpoint Produção:  </b>
+- <b>Endpoint Produção: #</b>
 - <b>Endpoint Staging: # </b>
 - <b>URL para checar logs de deploys: #</b>
 - O repositório é de responsabilidade da squad #
@@ -29,7 +29,9 @@ Essa codebase possui uma API REST usando princípios de arquitetura limpa para s
 ## Instalação e Setup Local
 
 1. Clone o repositório
-   - $ `git clone https://github.com/AlexGalhardo/todo-api-clean-architecture`
+   ```
+   git clone https://github.com/AlexGalhardo/todo-api-clean-architecture
+   ```
 2. Instale as dependências utilizando:
    - $ `npm install`
 3. Defina as variáveis de ambiente em um novo arquivo chamado `.env`, conforme o arquivo `.env.example`

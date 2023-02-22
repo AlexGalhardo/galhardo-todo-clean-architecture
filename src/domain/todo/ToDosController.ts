@@ -9,64 +9,64 @@ import GetToDoByIdUseCase from "./GetToDoByIdUseCase";
 import UpdateToDoByIdUseCase from "./UpdateToDoByIdUseCase";
 
 export default class ToDosController {
-    static async getAllToDos(req: Request, res: Response) {
-        const { success, toDos, error } = await new GetAllToDosUseCase().execute(getDecodedJwtToken(req).user_id);
+	static async getAllToDos (req: Request, res: Response) {
+		const { success, toDos, error } = await new GetAllToDosUseCase().execute(getDecodedJwtToken(req).user_id);
 
-        return res
-            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, toDos } : { success: false, error });
-    }
+		return res
+			.status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
+			.json(success ? { success: true, toDos } : { success: false, error });
+	}
 
-    static async getById(req: Request, res: Response) {
-        const { todo_id } = req.params;
+	static async getById (req: Request, res: Response) {
+		const { todo_id } = req.params;
 
-        const { success, toDo, error } = await new GetToDoByIdUseCase().execute(
-            // userId: getDecodedJwtToken(req).user_id,
-            todo_id,
-        );
+		const { success, toDo, error } = await new GetToDoByIdUseCase().execute(
+			getDecodedJwtToken(req).user_id,
+			todo_id,
+		);
 
-        return res
-            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, toDo } : { success: false, error });
-    }
+		return res
+			.status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
+			.json(success ? { success: true, toDo } : { success: false, error });
+	}
 
-    static async create(req: Request, res: Response) {
-        const { title, description, done } = req.body;
+	static async create (req: Request, res: Response) {
+		const { title, description, done } = req.body;
 
-        const { success, toDo, error } = await new CreateToDoUseCase().execute({
-            userId: getDecodedJwtToken(req).user_id,
-            title,
-            description,
-            done,
-        });
+		const { success, toDo, error } = await new CreateToDoUseCase().execute({
+			userId: getDecodedJwtToken(req).user_id,
+			title,
+			description,
+			done,
+		});
 
-        return res
-            .status(success ? HttpStatusCode.CREATED : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, toDo } : { success: false, error });
-    }
+		return res
+			.status(success ? HttpStatusCode.CREATED : HttpStatusCode.BAD_REQUEST)
+			.json(success ? { success: true, toDo } : { success: false, error });
+	}
 
-    static async updateById(req: Request, res: Response) {
-        const { id, title, description, done } = req.body;
+	static async updateById (req: Request, res: Response) {
+		const { id, title, description, done } = req.body;
 
-        const { success, toDo, error } = await new UpdateToDoByIdUseCase().execute({
-            id,
-            title,
-            description,
-            done,
-        });
+		const { success, toDo, error } = await new UpdateToDoByIdUseCase().execute({
+			id,
+			title,
+			description,
+			done,
+		});
 
-        return res
-            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, toDo } : { success: false, error });
-    }
+		return res
+			.status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
+			.json(success ? { success: true, toDo } : { success: false, error });
+	}
 
-    static async deleteToDoById(req: Request, res: Response) {
-        const { todo_id } = req.params;
+	static async deleteToDoById (req: Request, res: Response) {
+		const { todo_id } = req.params;
 
-        const { success, error } = await new DeleteToDoByIdUseCase().execute(todo_id);
+		const { success, error } = await new DeleteToDoByIdUseCase().execute(todo_id);
 
-        return res
-            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, status: `ToDo Id: "${todo_id}" deleted` } : { success: false, error });
-    }
+		return res
+			.status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
+			.json(success ? { success: true, status: `ToDo Id: ${todo_id} deleted` } : { success: false, error });
+	}
 }
