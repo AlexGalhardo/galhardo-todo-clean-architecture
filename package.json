@@ -1,7 +1,7 @@
 {
-	"name": "galhardo-todo",
+	"name": "todo-api-clean-architecture",
 	"version": "1.0.0",
-	"description": "galhardo-todo-api",
+	"description": "todo-api-clean-architecture boilerplate",
 	"main": "dist/server.js",
 	"author": "Alex Galhardo <aleexgvieira@gmail.com>",
 	"license": "MIT",
