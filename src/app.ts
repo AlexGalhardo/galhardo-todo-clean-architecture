@@ -4,10 +4,10 @@ import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 
-import "express-async-errors";
-
 import routes from "./routes";
 import { HttpStatusCode } from "./utils/HttpStatusCode";
+
+import "express-async-errors";
 
 const app = express();
 
