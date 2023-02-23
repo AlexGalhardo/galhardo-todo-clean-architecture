@@ -25,7 +25,7 @@ Essa codebase possui uma API REST usando princípios de arquitetura limpa para s
 
 ## Documentação dessa API
 - Existe um arquivo na raíz desse código chamado: `INSOMNIA-todo-api-clean-architecture-http-requests.json`
-- Importe esse arquivo no client do Insomnia para ver como os endpoints dessa API funciona
+- Importe esse arquivo no client do Insomnia para ver como os endpoints dessa API funcionam
 - Para baixar o Insomnia Client: https://insomnia.rest/
 
 ![documentacao-todo-api-insomnia](https://user-images.githubusercontent.com/19540357/220719844-d4b026e1-5380-4a7e-ae44-5540ed95e0b4.png)

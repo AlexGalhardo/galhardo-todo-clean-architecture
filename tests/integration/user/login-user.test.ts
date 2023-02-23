@@ -6,42 +6,42 @@ import app from "../../../src/app";
 import { HttpStatusCode } from "../../../src/utils/HttpStatusCode";
 
 describe("testing login user", () => {
-    it("it should return http status code 200 with correct json response along with user jwtToken", async () => {
-        const userObject = {
-            name: faker.internet.userName(),
-            email: "emailTest@gmail.com",
-            password: "test123",
-        };
+	it("it should return http status code 200 with correct json response along with user jwtToken", async () => {
+		const userRegistredResponse = await request(app)
+			.post("/api/user/register")
+			.send({
+				name: faker.internet.userName(),
+				email: "emailTest@gmail.com",
+				password: "test123",
+			})
+			.set("Content-Type", "application/json")
+			.set("Accept", "application/json");
 
-        const userRegistred = await request(app)
-            .post("/api/user/register")
-            .send(userObject)
-            .set("Content-Type", "application/json")
-            .set("Accept", "application/json");
+		const loginUserResponse = await request(app)
+			.post("/api/user/login")
+			.send({
+				email: "emailTest@gmail.com",
+				password: "test123",
+			})
+			.set("Content-Type", "application/json")
+			.set("Accept", "application/json");
 
-        const response = await request(app)
-            .post("/api/user/login")
-            .send({
-                email: "emailTest@gmail.com",
-                password: "test123",
-            })
-            .set("Content-Type", "application/json")
-            .set("Accept", "application/json");
+		expect(loginUserResponse.statusCode).toBe(HttpStatusCode.OK);
+		expect(loginUserResponse.body.success).toBeTruthy();
+		expect(loginUserResponse.body.user).toBeDefined();
+		expect(loginUserResponse.body.user.email).toBe("emailTest@gmail.com");
 
-        expect(response.statusCode).toBe(HttpStatusCode.OK);
-        expect(response.body.success).toBeTruthy();
-        expect(response.body.user).toBeDefined();
-        expect(response.body.user.email).toBe("emailTest@gmail.com");
+		console.log('userRegistredResponse.body => ', userRegistredResponse.body)
 
-        afterAll(async () => {
-            const response = await request(app)
-                .delete(`/api/user/delete/${userRegistred.body.id}`)
-                .set("Content-Type", "application/json")
-                .set("Accept", "application/json")
-                .set("Authorization", `Bearer ${userRegistred.body.jwtToken}`);
+		afterAll(async () => {
+			const deleteUserResponse = await request(app)
+				.delete(`/api/user/delete/${userRegistredResponse.body.id}`)
+				.set("Content-Type", "application/json")
+				.set("Accept", "application/json")
+				.set("Authorization", `Bearer ${userRegistredResponse.body.jwtToken}`);
 
-            expect(response.statusCode).toBe(HttpStatusCode.OK);
-            expect(response.body.success).toBeTruthy();
-        });
-    });
+			expect(deleteUserResponse.statusCode).toBe(HttpStatusCode.OK);
+			expect(deleteUserResponse.body.success).toBeTruthy();
+		});
+	});
 });

@@ -6,90 +6,94 @@ import DateTime from "../utils/DateTime";
 import ToDoEntity from "./ToDoEntity";
 
 export default class UserEntity {
-    private jwtToken: string | null = null;
+	private jwtToken: string | null = null;
 
-    constructor(
-        private readonly id: string,
-        private name: string,
-        private email: string,
-        private password: string,
-        private readonly createdAt: string = DateTime.getNow,
-        private updatedAt: string | null = null,
-        private toDos: ToDoEntity[] = [],
-    ) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.setJwtToken();
-        this.toDos = toDos;
-    }
+	constructor(
+		private readonly id: string,
+		private name: string,
+		private email: string,
+		private password: string,
+		private readonly createdAt: string = DateTime.getNow,
+		private updatedAt: string | null = null,
+		private toDos: ToDoEntity[] = [],
+	) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.setJwtToken();
+		this.toDos = toDos;
+	}
 
-    static async init(id: string, name: string, email: string, password: string) {
-        const hashPassword = await Bcrypt.hash(password);
-        return new UserEntity(id, name, email, hashPassword);
-    }
+	static async init (id: string, name: string, email: string, password: string) {
+		const hashPassword = await Bcrypt.hash(password);
+		return new UserEntity(id, name, email, hashPassword);
+	}
 
-    get getId(): string {
-        return this.id;
-    }
+	get getId (): string {
+		return this.id;
+	}
 
-    get getName(): string {
-        return this.name;
-    }
+	get getName (): string {
+		return this.name;
+	}
 
-    get getEmail(): string {
-        return this.email;
-    }
+	get getEmail (): string {
+		return this.email;
+	}
 
-    get getPassword(): string {
-        return this.password;
-    }
+	get getPassword (): string {
+		return this.password;
+	}
 
-    public setName(newName: string): void {
-        this.name = newName;
-    }
+	public setName (newName: string): void {
+		this.name = newName;
+	}
 
-    public setEmail(newEmail: string): void {
-        this.email = newEmail;
-    }
+	public setEmail (newEmail: string): void {
+		this.email = newEmail;
+	}
 
-    public async setPassword(newPassword: string): Promise<void> {
-        this.password = await Bcrypt.hash(newPassword);
-    }
+	public async setPassword (newPassword: string): Promise<void> {
+		this.password = await Bcrypt.hash(newPassword);
+	}
 
-    get getJwtToken(): string {
-        return this.jwtToken;
-    }
+	get getJwtToken (): string {
+		return this.jwtToken;
+	}
 
-    get getCreatedAt(): string {
-        return this.createdAt;
-    }
+	get getCreatedAt (): string {
+		return this.createdAt;
+	}
 
-    get getUpdatedAt(): string {
-        return this.updatedAt;
-    }
+	get getUpdatedAt (): string {
+		return this.updatedAt;
+	}
 
-    public addToDo(toDo: ToDoEntity) {
-        this.toDos.push(toDo);
-    }
+	public addToDo (toDo: ToDoEntity) {
+		this.toDos.push(toDo);
+	}
 
-    get getAllTodos(): ToDoEntity[] {
-        return this.toDos;
-    }
+	get getAllTodos (): ToDoEntity[] {
+		return this.toDos;
+	}
 
-    public getToDoById(toDoId: string): ToDoEntity | null {
-        for (let i = 0; i < this.toDos.length; i++) {
-            if (this.toDos[i].getId === toDoId) {
-                return this.toDos[i];
-            }
-        }
-        return null;
-    }
+	public getToDoById (toDoId: string): ToDoEntity | null {
+		for (let i = 0; i < this.toDos.length; i++) {
+			if (this.toDos[i].getId === toDoId) {
+				return this.toDos[i];
+			}
+		}
+		return null;
+	}
 
-    public setJwtToken(): void {
-        this.jwtToken = jwt.sign({ user_id: this.id }, process.env.JWT_SECRET as string, {
-            expiresIn: "1h",
-        });
-    }
+	public setJwtToken (): void {
+		this.jwtToken = jwt.sign({ userId: this.id }, process.env.JWT_SECRET as string, {
+			expiresIn: "1h",
+		});
+	}
+
+	public setUpdatedAt (): void {
+		this.updatedAt = DateTime.getNow
+	}
 }
