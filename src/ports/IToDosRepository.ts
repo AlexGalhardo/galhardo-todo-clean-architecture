@@ -31,12 +31,8 @@ export interface ToDoRepositoryResponse {
 
 export interface IToDosRepository {
     getAllByUserId(userId: string): Promise<ToDoRepositoryResponse>;
-
     getById(toDoId: string): Promise<ToDoRepositoryResponse>;
-
     create(newToDo: ToDoEntity): Promise<ToDoRepositoryResponse>;
-
     save(updatedToDo: ToDoEntity): Promise<ToDoRepositoryResponse>;
-
     deleteById(toDoId: string): Promise<ToDoRepositoryResponse>;
 }
