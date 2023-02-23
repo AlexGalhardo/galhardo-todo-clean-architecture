@@ -20,7 +20,7 @@ export const userIsAuthenticated = async (req: Request, res: Response, next: Nex
 		}
 		return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
 			success: false,
-			message: "Please provide the User JWT Token in Header Authorization Bearer Token",
+			error: "Please provide the User JWT Token in Header Authorization Bearer Token",
 		});
 	}
 
@@ -29,14 +29,14 @@ export const userIsAuthenticated = async (req: Request, res: Response, next: Nex
 		if (!success) {
 			return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
 				success: false,
-				message: "User jwt token inválid",
+				error: "User jwt token inválid",
 			});
 		}
 		return next();
 	} catch (error) {
 		return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
 			success: false,
-			message: error,
+			error
 		});
 	}
 };

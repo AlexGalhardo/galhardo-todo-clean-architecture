@@ -109,16 +109,16 @@ export default class PostgresToDosRepository implements IToDosRepository {
 		}
 	}
 
-	async save (toDo: ToDoEntity): Promise<ToDoRepositoryResponse> {
+	async save (updatedToDo: ToDoEntity): Promise<ToDoRepositoryResponse> {
 		try {
 			const queryResponse = await prisma.toDo.update({
 				where: {
-					id: toDo.getId,
+					id: updatedToDo.getId,
 				},
 				data: {
-					title: toDo.getTitle,
-					description: toDo.getDescription,
-					done: toDo.getDone,
+					title: updatedToDo.getTitle,
+					description: updatedToDo.getDescription,
+					done: updatedToDo.getDone,
 				},
 			});
 

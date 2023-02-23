@@ -36,7 +36,6 @@ describe("testing register user", () => {
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${userRegistredResponse.body.jwtToken}`);
 
-		console.log('updateUserResponse.body => ', updateUserResponse.body)
 		expect(updateUserResponse.statusCode).toBe(HttpStatusCode.OK);
 		expect(updateUserResponse.body.user.id).toBeDefined();
 		expect(updateUserResponse.body.user.name).toMatchObject(updatedUser.newName);

@@ -17,6 +17,9 @@ describe("testing logout user", () => {
 			.set("Content-Type", "application/json")
 			.set("Accept", "application/json");
 
+		expect(userRegistredResponse.statusCode).toBe(HttpStatusCode.CREATED);
+		expect(userRegistredResponse.body.jwtToken).toBeDefined();
+
 		const logoutUserResponse = await request(app)
 			.post("/api/user/logout")
 			.set("Content-Type", "application/json")
@@ -29,7 +32,7 @@ describe("testing logout user", () => {
 
 		afterAll(async () => {
 			const deleteUserResponse = await request(app)
-				.delete(`/api/user/delete/${userRegistredResponse.body.user.id}`)
+				.delete(`/api/user/delete/${userRegistredResponse.body.id}`)
 				.set("Content-Type", "application/json")
 				.set("Accept", "application/json")
 				.set("Authorization", `Bearer ${userRegistredResponse.body.jwtToken}`);

@@ -17,6 +17,9 @@ describe("testing login user", () => {
 			.set("Content-Type", "application/json")
 			.set("Accept", "application/json");
 
+		expect(userRegistredResponse.statusCode).toBe(HttpStatusCode.CREATED);
+		expect(userRegistredResponse.body.jwtToken).toBeDefined();
+
 		const loginUserResponse = await request(app)
 			.post("/api/user/login")
 			.send({
@@ -30,8 +33,6 @@ describe("testing login user", () => {
 		expect(loginUserResponse.body.success).toBeTruthy();
 		expect(loginUserResponse.body.user).toBeDefined();
 		expect(loginUserResponse.body.user.email).toBe("emailTest@gmail.com");
-
-		console.log('userRegistredResponse.body => ', userRegistredResponse.body)
 
 		afterAll(async () => {
 			const deleteUserResponse = await request(app)

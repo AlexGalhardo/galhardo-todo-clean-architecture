@@ -88,7 +88,7 @@ export default class UserEntity {
 	}
 
 	public setJwtToken (): void {
-		this.jwtToken = jwt.sign({ userId: this.id }, process.env.JWT_SECRET as string, {
+		this.jwtToken = jwt.sign({ userId: this.getId }, process.env.JWT_SECRET as string, {
 			expiresIn: "1h",
 		});
 	}

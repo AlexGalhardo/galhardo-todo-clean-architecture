@@ -1,15 +1,13 @@
 import { getUsersRepository } from "../../factories/getUsersRepository";
-import { IUserUpdateByIdUseCaseParams, IUsersRepository } from "../../ports/IUsersRepository";
+import { IUserUpdateByIdUseCaseParams, IUsersRepository, IUserUseCaseDefaultResponse } from "../../ports/IUsersRepository";
 import Bcrypt from "../../utils/Bcrypt";
 
 export default class UserUpdateByIdUseCase {
 	constructor(private readonly usersRepository: IUsersRepository = getUsersRepository()) { }
 
-	async execute ({ id, newName, newEmail, olderPassword, newPassword }: IUserUpdateByIdUseCaseParams) {
+	async execute ({ id, newName, newEmail, olderPassword, newPassword }: IUserUpdateByIdUseCaseParams): Promise<IUserUseCaseDefaultResponse> {
 		try {
 			const { success: userAlreadyExistsWithThisNewEmail } = await this.usersRepository.getUserEntityByEmail(newEmail)
-
-			console.log('userAlreadyExistsWithThisNewEmail => ', userAlreadyExistsWithThisNewEmail)
 
 			if (!userAlreadyExistsWithThisNewEmail) {
 				const { userEntity: user } = await this.usersRepository.getUserEntityById(id);
@@ -37,10 +35,16 @@ export default class UserUpdateByIdUseCase {
 					};
 				}
 			}
+			else {
+				return {
+					success: false,
+					error: 'A user already exists with this newEmail'
+				}
+			}
 		} catch (error) {
 			return {
 				success: false,
-				error,
+				error: `${error}`,
 			};
 		}
 	}
