@@ -29,16 +29,16 @@ export default class UserController {
     }
 
     static async update(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
-		try {
+        try {
             const { newName, newEmail, olderPassword, newPassword } = req.body;
 
-			const { success, data } = await new UserUpdateByIdUseCase().execute({
-				id: res.locals.userId,
-				newName,
-				newEmail,
-				olderPassword,
-				newPassword,
-			});
+            const { success, data } = await new UserUpdateByIdUseCase().execute({
+                id: res.locals.userId,
+                newName,
+                newEmail,
+                olderPassword,
+                newPassword,
+            });
 
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
         } catch (error) {
@@ -47,13 +47,13 @@ export default class UserController {
     }
 
     static async login(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
-		try {
+        try {
             const { email, password } = req.body;
 
-			const { success, data } = await new UserLoginUseCase().execute({
-				email,
-				password,
-			});
+            const { success, data } = await new UserLoginUseCase().execute({
+                email,
+                password,
+            });
 
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
         } catch (error) {
@@ -62,7 +62,7 @@ export default class UserController {
     }
 
     static async logout(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
-		try {
+        try {
             const { success } = await new UserLogoutUseCase().execute(res.locals.userId);
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true });
         } catch (error) {
@@ -71,9 +71,9 @@ export default class UserController {
     }
 
     static async delete(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
-		try {
+        try {
             const { user_id } = req.params;
-        	const { success, data } = await new UserDeleteByIdUseCase().execute(user_id);
+            const { success, data } = await new UserDeleteByIdUseCase().execute(user_id);
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
         } catch (error) {
             return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });

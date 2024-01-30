@@ -20,8 +20,8 @@ export default class UserCreateUseCase {
 
     async execute({ name, email, password }: UserCreateDTO): Promise<UserCreateUseCaseResponse> {
         try {
-			const emailAlreadyRegistered = await this.usersRepository.getByEmail(email)
-			if(emailAlreadyRegistered) throw new Error(ErrorsMessages.EMAIL_ALREADY_REGISTERED)
+            const emailAlreadyRegistered = await this.usersRepository.getByEmail(email);
+            if (emailAlreadyRegistered) throw new Error(ErrorsMessages.EMAIL_ALREADY_REGISTERED);
 
             const userCreated = await this.usersRepository.create({
                 id: randomUUID(),
