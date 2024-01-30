@@ -1,42 +1,55 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
-import PostgresUsersRepository from "../repositories/postgresql/PostgresUsersRepository";
-import { getDecodedJwtToken } from "../utils/DecodeJwtToken";
+import UsersRepository from "../repositories/Users.repository";
 import { HttpStatusCode } from "../utils/HttpStatusCode";
+import { ErrorsMessages } from "src/utils/ErrorsMessages";
 
 export default interface IUserJwtPayload extends jwt.JwtPayload {
     userId: string;
 }
 
-export const userIsAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
+export const userIsAuthenticated = async (request: Request, response: Response, next: NextFunction) => {
     if (
-        !req.headers.authorization ||
-        !req.headers.authorization.startsWith("Bearer") ||
-        !req.headers.authorization.split(" ")[1]
+        !request.headers.authorization ||
+        !request.headers.authorization.startsWith("Bearer") ||
+        !request.headers.authorization.split(" ")[1]
     ) {
         if (process.env.NODE_ENV === "development_user_test") {
             return next();
         }
-        return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
+        return response.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
             success: false,
-            error: "Please provide the User JWT Token in Header Authorization Bearer Token",
+            message: "Invalid User JWT Token in Header Authorization Bearer Token",
         });
     }
 
     try {
-        const { success } = await new PostgresUsersRepository().getUserEntityById(getDecodedJwtToken(req).userId);
-        if (!success) {
-            return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
+        const JWT_TOKEN = request.headers.authorization?.split(" ")[1];
+
+        if (process.env.NODE_ENV === "development_user_test") {
+            return {
+                userId: process.env.USER_TEST_ID,
+            };
+        }
+
+        const { userId } = jwt.verify(JWT_TOKEN, process.env.JWT_SECRET) as jwt.JwtPayload;
+
+        const userFound = await new UsersRepository().getById(userId);
+
+        if (!userFound) {
+            return response.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
                 success: false,
-                error: "User jwt token inválid",
+                message: ErrorsMessages.USER_NOT_FOUND,
             });
         }
+
+        response.locals.userId = userId;
+
         return next();
     } catch (error) {
-        return res.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
+        return response.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
             success: false,
-            error,
+            message: error,
         });
     }
 };

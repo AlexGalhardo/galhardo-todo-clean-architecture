@@ -1,13 +1,13 @@
 import { getUsersRepository } from "../../factories/getUsersRepository";
 import {
     IUserUpdateByIdUseCaseParams,
-    IUsersRepository,
+    UsersRepositoryPort,
     IUserUseCaseDefaultResponse,
-} from "../../ports/IUsersRepository";
+} from "../../ports/UsersRepositoryPort";
 import Bcrypt from "../../utils/Bcrypt";
 
 export default class UserUpdateByIdUseCase {
-    constructor(private readonly usersRepository: IUsersRepository = getUsersRepository()) {}
+    constructor(private readonly usersRepository: UsersRepositoryPort = getUsersRepository()) {}
 
     async execute({
         id,
@@ -17,9 +17,8 @@ export default class UserUpdateByIdUseCase {
         newPassword,
     }: IUserUpdateByIdUseCaseParams): Promise<IUserUseCaseDefaultResponse> {
         try {
-            const { success: userAlreadyExistsWithThisNewEmail } = await this.usersRepository.getUserEntityByEmail(
-                newEmail,
-            );
+            const { success: userAlreadyExistsWithThisNewEmail } =
+                await this.usersRepository.getUserEntityByEmail(newEmail);
 
             if (!userAlreadyExistsWithThisNewEmail) {
                 const { userEntity: user } = await this.usersRepository.getUserEntityById(id);

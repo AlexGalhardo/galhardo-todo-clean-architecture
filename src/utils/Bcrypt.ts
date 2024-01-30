@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcrypt";
 
 export default class Bcrypt {
     static async hash(password: string) {

@@ -1,9 +1,9 @@
 import { getUsersRepository } from "../../factories/getUsersRepository";
-import { IUserLoginUseCaseParams, IUsersRepository } from "../../ports/IUsersRepository";
+import { IUserLoginUseCaseParams, UsersRepositoryPort } from "../../ports/UsersRepositoryPort";
 import Bcrypt from "../../utils/Bcrypt";
 
 export default class UserLoginUseCase {
-    constructor(private readonly usersRepository: IUsersRepository = getUsersRepository()) {}
+    constructor(private readonly usersRepository: UsersRepositoryPort = getUsersRepository()) {}
 
     async execute({ email, password }: IUserLoginUseCaseParams) {
         try {

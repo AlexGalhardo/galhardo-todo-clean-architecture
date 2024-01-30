@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import ToDoController from "./domain/todo/ToDoController";
-import UserController from "./domain/user/UserController";
+import ToDoController from "./controllers/ToDo.controller";
+import UserController from "./controllers/User.controller";
 import { userIsAuthenticated } from "./middlewares/userIsAuthenticated";
 
 export default Router()
@@ -11,8 +11,8 @@ export default Router()
     .put("/user/update", userIsAuthenticated, UserController.update)
     .delete("/user/delete/:user_id", userIsAuthenticated, UserController.deleteById)
 
-    .get("/todo/all", userIsAuthenticated, ToDoController.getAllToDos)
+    .get("/todo/all", userIsAuthenticated, ToDoController.getAll)
     .get("/todo/:todo_id", userIsAuthenticated, ToDoController.getById)
     .post("/todo/create", userIsAuthenticated, ToDoController.create)
-    .put("/todo/update", userIsAuthenticated, ToDoController.updateById)
-    .delete("/todo/delete/:todo_id", userIsAuthenticated, ToDoController.deleteById);
+    .put("/todo/update", userIsAuthenticated, ToDoController.update)
+    .delete("/todo/delete/:todo_id", userIsAuthenticated, ToDoController.delete);

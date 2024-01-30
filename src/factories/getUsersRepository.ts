@@ -1,6 +1,5 @@
-import { IUsersRepository } from "../ports/IUsersRepository";
-import PostgresUsersRepository from "../repositories/postgresql/PostgresUsersRepository";
+import UsersRepository from "../repositories/Users.repository";
 
-export const getUsersRepository = (): IUsersRepository => {
-    return new PostgresUsersRepository();
+export const getUsersRepository = (): UsersRepository => {
+    return new UsersRepository();
 };

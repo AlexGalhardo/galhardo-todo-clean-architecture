@@ -29,7 +29,7 @@
 - $ sudo docker-compose up -d --remove-orphans
 - $ sudo docker inspect todo_pg | grep '"IPAddress"' | head -n 1
 - $ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' todo_pg
-- $ docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' todo_postgres
+- $ docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres_todo_api
 
 
 ## Deploy Railway.app

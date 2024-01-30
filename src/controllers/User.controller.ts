@@ -1,13 +1,10 @@
 import { Request, Response } from "express";
-
-import { IUserUseCaseDefaultResponse } from "../../ports/IUsersRepository";
-import { getDecodedJwtToken } from "../../utils/DecodeJwtToken";
-import { HttpStatusCode } from "../../utils/HttpStatusCode";
-import UserDeleteByIdUseCase from "./UserDeleteByIdUseCase";
-import UserLoginUseCase from "./UserLoginUseCase";
-import UserLogoutUseCase from "./UserLogoutUseCase";
-import UserRegisterUseCase from "./UserRegisterUseCase";
-import UserUpdateByIdUseCase from "./UserUpdateByIdUseCase";
+import { HttpStatusCode } from "../utils/HttpStatusCode";
+import UserDeleteByIdUseCase from "../useCases/user/UserDeleteByIdUseCase";
+import UserLoginUseCase from "../useCases/user/UserLoginUseCase";
+import UserLogoutUseCase from "../useCases/user/UserLogoutUseCase";
+import UserRegisterUseCase from "../useCases/user/UserCreate.useCase";
+import UserUpdateByIdUseCase from "../useCases/user/UserUpdateByIdUseCase";
 
 export default class UserController {
     static async register(req: Request, res: Response): Promise<Response<IUserUseCaseDefaultResponse>> {

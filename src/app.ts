@@ -35,6 +35,6 @@ export default app
     .get("/", (_, res: Response) => {
         return res.status(HttpStatusCode.OK).json({
             success: true,
-            status: "TODO API CLEAN ARCHITECTURE HTTP REST API WORKING...!",
+            status: "ToDo API working...",
         });
     });

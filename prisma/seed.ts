@@ -1,8 +1,6 @@
-import { randomUUID } from "crypto";
-
+import { randomUUID } from "node:crypto";
 import prisma from "../src/config/prisma";
 import Bcrypt from "../src/utils/Bcrypt";
-import DateTime from "../src/utils/DateTime";
 
 export const { USER_TEST_ID, USER_TEST_EMAIL, USER_TEST_PASSWORD } = process.env;
 
@@ -17,7 +15,7 @@ const seedPrismaDataBase = async () => {
                 name: "test",
                 email: USER_TEST_EMAIL as string,
                 password: await Bcrypt.hash(USER_TEST_PASSWORD as string),
-                created_at: DateTime.getNow,
+                created_at: new Date(),
             },
         ],
         skipDuplicates: true,
@@ -31,7 +29,7 @@ const seedPrismaDataBase = async () => {
                 title: "todo teste title",
                 description: "Teste",
                 done: false,
-                created_at: DateTime.getNow,
+                created_at: new Date(),
             },
         ],
         skipDuplicates: false,

@@ -1,36 +1,36 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id         String  @id @default(uuid())
-    name       String
-    email      String  @unique
-    password   String
-    jwt_token  String?
-    created_at String
-    updated_at String?
-    ToDo       ToDo[]
+  id         String    @id @default(uuid())
+  name       String
+  email      String    @unique
+  password   String
+  jwt_token  String?
+  created_at DateTime
+  updated_at DateTime?
+  ToDo       ToDo[]
 
-    @@map("users")
+  @@map("users")
 }
 
 model ToDo {
-    id          String  @id @default(uuid())
-    title       String
-    description String
-    done        Boolean @default(false)
+  id          String  @id @default(uuid())
+  title       String
+  description String
+  done        Boolean @default(false)
 
-    user_id String
-    user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-    created_at String
-    updated_at String?
+  created_at DateTime
+  updated_at DateTime?
 
-    @@map("todos")
+  @@map("todos")
 }

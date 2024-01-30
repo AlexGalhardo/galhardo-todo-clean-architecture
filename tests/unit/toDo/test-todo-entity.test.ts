@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import { describe, it, expect } from "vitest";
 
 import ToDoEntity from "../../../src/entities/ToDoEntity";

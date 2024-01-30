@@ -1,25 +1,15 @@
 version: '3'
 
 services:
-
-    todo_postgres:
+    postgres:
         image: postgres
-        container_name: todo_postgres
+        container_name: postgres_todo_api
         environment:
             POSTGRES_PASSWORD: "postgres"
         ports:
-            - "2222:5432"
+            - "5432:5432"
         volumes:
             - postgres-data:/var/lib/postgresql
-        networks:
-            - todo_network
-
-    # system: postgresql | username: postgres | password: postgres |server: todo_adminer
-    todo_adminer:
-        image: adminer
-        container_name: todo_adminer
-        ports:
-            - "8080:8080"
         networks:
             - todo_network
 
