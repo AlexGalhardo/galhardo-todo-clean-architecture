@@ -24,7 +24,7 @@ export const userIsAuthenticated = async (request: Request, response: Response, 
     }
 
     try {
-        const JWT_TOKEN = request.headers.authorization?.split(" ")[1];
+        const headerJwtToken = request.headers.authorization?.split(" ")[1];
 
         if (process.env.NODE_ENV === "development_user_test") {
             return {
@@ -32,9 +32,9 @@ export const userIsAuthenticated = async (request: Request, response: Response, 
             };
         }
 
-        const { userId } = jwt.verify(JWT_TOKEN, process.env.JWT_SECRET) as jwt.JwtPayload;
+        const { id } = jwt.verify(headerJwtToken, process.env.JWT_SECRET) as jwt.JwtPayload;
 
-        const userFound = await new UsersRepository().getById(userId);
+        const userFound = await new UsersRepository().getById(id);
 
         if (!userFound) {
             return response.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
@@ -43,13 +43,13 @@ export const userIsAuthenticated = async (request: Request, response: Response, 
             });
         }
 
-        response.locals.userId = userId;
+        response.locals.userId = id;
 
         return next();
     } catch (error) {
         return response.status(HttpStatusCode.UNPROCESSABLE_ENTITY).json({
             success: false,
-            message: error,
+            message: error.message,
         });
     }
 };

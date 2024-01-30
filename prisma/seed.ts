@@ -1,10 +1,12 @@
+import "dotenv/config";
 import { randomUUID } from "node:crypto";
 import prisma from "../src/config/prisma";
 import Bcrypt from "../src/utils/Bcrypt";
+import * as jwt from "jsonwebtoken";
 
 export const { USER_TEST_ID, USER_TEST_EMAIL, USER_TEST_PASSWORD } = process.env;
 
-const seedPrismaDataBase = async () => {
+const seedDatabase = async () => {
     await prisma.user.deleteMany({});
     await prisma.toDo.deleteMany({});
 
@@ -15,6 +17,9 @@ const seedPrismaDataBase = async () => {
                 name: "test",
                 email: USER_TEST_EMAIL as string,
                 password: await Bcrypt.hash(USER_TEST_PASSWORD as string),
+                jwt_token: jwt.sign({ USER_TEST_ID, USER_TEST_EMAIL }, String(process.env.JWT_SECRET), {
+                    expiresIn: "1h",
+                }),
                 created_at: new Date(),
             },
         ],
@@ -25,7 +30,7 @@ const seedPrismaDataBase = async () => {
         data: [
             {
                 id: randomUUID(),
-                user_id: USER_TEST_ID as string,
+                user_id: String(USER_TEST_ID),
                 title: "todo teste title",
                 description: "Teste",
                 done: false,
@@ -36,7 +41,7 @@ const seedPrismaDataBase = async () => {
     });
 };
 
-seedPrismaDataBase()
+seedDatabase()
     .catch((e) => {
         console.error(e);
         process.exit(1);

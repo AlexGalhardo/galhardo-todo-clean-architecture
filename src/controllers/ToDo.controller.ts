@@ -19,7 +19,7 @@ export default class ToDoController {
             const { success, data } = await new ToDoGetAllUseCase().execute(res.locals.userId);
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
         } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error });
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
         }
     }
 
@@ -29,7 +29,7 @@ export default class ToDoController {
             const { success, data } = await new ToDoGetByIdUseCase().execute(todo_id);
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
         } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error });
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
         }
     }
 
@@ -44,7 +44,7 @@ export default class ToDoController {
             });
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
         } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error });
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
         }
     }
 
@@ -59,7 +59,7 @@ export default class ToDoController {
             });
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
         } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error });
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
         }
     }
 
@@ -69,7 +69,7 @@ export default class ToDoController {
             const { success, data } = await new ToDoDeleteByIdUseCase().execute(todo_id);
             if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
         } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error });
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
         }
     }
 }

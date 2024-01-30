@@ -1,22 +1,30 @@
+import { User } from "@prisma/client";
 import { getUsersRepository } from "../../factories/getUsersRepository";
-import { UsersRepositoryPort, IUserUseCaseDefaultResponse } from "../../ports/UsersRepositoryPort";
+import { UsersRepositoryPort } from "src/repositories/Users.repository";
+
+interface UserDeleteByIdUseCaseResponse {
+	success: boolean
+	data: User
+}
 
 export default class UserDeleteByIdUseCase {
     constructor(private readonly usersRepository: UsersRepositoryPort = getUsersRepository()) {}
 
-    async execute(userId: string): Promise<IUserUseCaseDefaultResponse> {
-        const { success, error } = await this.usersRepository.deleteById(userId);
+    async execute(id: string): Promise<UserDeleteByIdUseCaseResponse> {
+		try {
+			console.log('\n\n user id que entoru => ', id)
 
-        if (success) {
-            return {
-                success: true,
-                status: `User id: ${userId} deleted`,
-            };
-        }
+			const userDeleted = await this.usersRepository.delete(id);
 
-        return {
-            success: false,
-            error,
-        };
+			if (userDeleted) {
+				return {
+					success: true,
+					data: userDeleted
+				};
+			}
+		}
+		catch(error) {
+			throw new Error(error)
+		}
     }
 }

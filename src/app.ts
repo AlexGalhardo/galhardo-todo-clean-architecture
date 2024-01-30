@@ -1,6 +1,6 @@
+import "dotenv/config";
 import compression from "compression";
 import cors from "cors";
-import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 
@@ -27,7 +27,7 @@ export default app
 
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
             success: false,
-            error,
+            message: error.message,
         });
 
         return next();
@@ -35,6 +35,6 @@ export default app
     .get("/", (_, res: Response) => {
         return res.status(HttpStatusCode.OK).json({
             success: true,
-            status: "ToDo API working...",
+            message: "ToDo API Clean Architecture is on, lets goo!",
         });
     });

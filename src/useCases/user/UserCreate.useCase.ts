@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { getUsersRepository } from "../../factories/getUsersRepository";
 import { UsersRepositoryPort } from "src/repositories/Users.repository";
 import { User } from "@prisma/client";
+import { ErrorsMessages } from "src/utils/ErrorsMessages";
 
 interface UserCreateUseCaseResponse {
     success: boolean;
@@ -19,6 +20,9 @@ export default class UserCreateUseCase {
 
     async execute({ name, email, password }: UserCreateDTO): Promise<UserCreateUseCaseResponse> {
         try {
+			const emailAlreadyRegistered = await this.usersRepository.getByEmail(email)
+			if(emailAlreadyRegistered) throw new Error(ErrorsMessages.EMAIL_ALREADY_REGISTERED)
+
             const userCreated = await this.usersRepository.create({
                 id: randomUUID(),
                 name,

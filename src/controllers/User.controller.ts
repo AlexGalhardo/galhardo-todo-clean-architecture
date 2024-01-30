@@ -3,68 +3,80 @@ import { HttpStatusCode } from "../utils/HttpStatusCode";
 import UserDeleteByIdUseCase from "../useCases/user/UserDeleteByIdUseCase";
 import UserLoginUseCase from "../useCases/user/UserLoginUseCase";
 import UserLogoutUseCase from "../useCases/user/UserLogoutUseCase";
-import UserRegisterUseCase from "../useCases/user/UserCreate.useCase";
 import UserUpdateByIdUseCase from "../useCases/user/UserUpdateByIdUseCase";
+import { User } from "@prisma/client";
+import UserCreateUseCase from "src/useCases/user/UserCreate.useCase";
+
+interface UserControllerResponse {
+    success: boolean;
+    message?: string;
+    data?: User;
+}
 
 export default class UserController {
-    static async register(req: Request, res: Response): Promise<Response<IUserUseCaseDefaultResponse>> {
-        const { name, email, password } = req.body;
-
-        const { success, data, error } = await new UserRegisterUseCase().execute({
-            name,
-            email,
-            password,
-        });
-
-        return res
-            .status(success ? HttpStatusCode.CREATED : HttpStatusCode.BAD_REQUEST)
-            .json(success ? data : { success: false, error });
+    static async create(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
+        try {
+            const { name, email, password } = req.body;
+            const { success, data } = await new UserCreateUseCase().execute({
+                name,
+                email,
+                password,
+            });
+            if (success === true) return res.status(HttpStatusCode.CREATED).json({ success: true, data });
+        } catch (error) {
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+        }
     }
 
-    static async update(req: Request, res: Response): Promise<Response<IUserUseCaseDefaultResponse>> {
-        const { newName, newEmail, olderPassword, newPassword } = req.body;
+    static async update(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
+		try {
+            const { newName, newEmail, olderPassword, newPassword } = req.body;
 
-        const { success, data, error } = await new UserUpdateByIdUseCase().execute({
-            id: getDecodedJwtToken(req).userId,
-            newName,
-            newEmail,
-            olderPassword,
-            newPassword,
-        });
+			const { success, data } = await new UserUpdateByIdUseCase().execute({
+				id: res.locals.userId,
+				newName,
+				newEmail,
+				olderPassword,
+				newPassword,
+			});
 
-        return res
-            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, user: data } : { success: false, error });
+            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
+        } catch (error) {
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+        }
     }
 
-    static async login(req: Request, res: Response): Promise<Response<IUserUseCaseDefaultResponse>> {
-        const { email, password } = req.body;
+    static async login(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
+		try {
+            const { email, password } = req.body;
 
-        const { success, data, error } = await new UserLoginUseCase().execute({
-            email,
-            password,
-        });
+			const { success, data } = await new UserLoginUseCase().execute({
+				email,
+				password,
+			});
 
-        return res
-            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, user: data } : { success: false, error });
+            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
+        } catch (error) {
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+        }
     }
 
-    static async logout(req: Request, res: Response): Promise<Response<IUserUseCaseDefaultResponse>> {
-        const { success, status, error } = await new UserLogoutUseCase().execute(getDecodedJwtToken(req).userId);
-
-        return res
-            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, status } : { success: false, error });
+    static async logout(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
+		try {
+            const { success } = await new UserLogoutUseCase().execute(res.locals.userId);
+            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true });
+        } catch (error) {
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+        }
     }
 
-    static async deleteById(req: Request, res: Response): Promise<Response<IUserUseCaseDefaultResponse>> {
-        const { user_id } = req.params;
-
-        const { success, status, error } = await new UserDeleteByIdUseCase().execute(user_id);
-
-        return res
-            .status(success ? HttpStatusCode.OK : HttpStatusCode.BAD_REQUEST)
-            .json(success ? { success: true, status } : { success: false, error });
+    static async delete(req: Request, res: Response): Promise<Response<UserControllerResponse>> {
+		try {
+            const { user_id } = req.params;
+        	const { success, data } = await new UserDeleteByIdUseCase().execute(user_id);
+            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
+        } catch (error) {
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+        }
     }
 }

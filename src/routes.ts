@@ -5,14 +5,14 @@ import UserController from "./controllers/User.controller";
 import { userIsAuthenticated } from "./middlewares/userIsAuthenticated";
 
 export default Router()
-    .post("/user/register", UserController.register)
+    .post("/user", UserController.create)
     .post("/user/login", UserController.login)
     .post("/user/logout", userIsAuthenticated, UserController.logout)
-    .put("/user/update", userIsAuthenticated, UserController.update)
-    .delete("/user/delete/:user_id", userIsAuthenticated, UserController.deleteById)
+    .put("/user", userIsAuthenticated, UserController.update)
+    .delete("/user/:user_id", userIsAuthenticated, UserController.delete)
 
     .get("/todo/all", userIsAuthenticated, ToDoController.getAll)
     .get("/todo/:todo_id", userIsAuthenticated, ToDoController.getById)
-    .post("/todo/create", userIsAuthenticated, ToDoController.create)
-    .put("/todo/update", userIsAuthenticated, ToDoController.update)
-    .delete("/todo/delete/:todo_id", userIsAuthenticated, ToDoController.delete);
+    .post("/todo", userIsAuthenticated, ToDoController.create)
+    .put("/todo", userIsAuthenticated, ToDoController.update)
+    .delete("/todo/:todo_id", userIsAuthenticated, ToDoController.delete);
