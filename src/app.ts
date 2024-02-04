@@ -27,7 +27,7 @@ export default app
 
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
             success: false,
-            message: error.message,
+            message: error,
         });
 
         return next();
