@@ -1,21 +1,20 @@
-version: '3'
-
 services:
-    postgres_todo_api:
+    postgres:
         image: postgres
-        container_name: postgres_todo_api
+        container_name: postgres
         environment:
             POSTGRES_PASSWORD: "postgres"
         ports:
             - "5432:5432"
         volumes:
-            - postgres-data:/var/lib/postgresql
+            - postgres:/var/lib/postgresql
         networks:
-            - todo_api_network
+            - network
 
 networks:
-    todo_api_network:
+    network:
         driver: bridge
 
 volumes:
-    postgres-data: null
+    postgres:
+        driver: local

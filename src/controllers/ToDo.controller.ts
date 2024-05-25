@@ -1,75 +1,65 @@
-import { Request, Response } from "express";
-import { HttpStatusCode } from "../utils/HttpStatusCode";
-import { ToDo } from "@prisma/client";
-import ToDoCreateUseCase from "src/useCases/todo/ToDoCreate.useCase";
-import ToDoUpdateUseCase from "src/useCases/todo/ToDoUpdate.useCase";
-import ToDoDeleteByIdUseCase from "../useCases/todo/ToDoDelete.useCase";
-import ToDoGetAllUseCase from "src/useCases/todo/ToDoGetAll.useCase";
-import ToDoGetByIdUseCase from "src/useCases/todo/ToDoGetById.useCase";
-
-interface ToDoControllerResponse {
-    success: boolean;
-    message?: string;
-    data?: ToDo | ToDo[];
-}
+import ToDoCreateUseCase from "src/use-cases/todo/todo-create.usecase";
+import ToDoDeleteByIdUseCase from "src/use-cases/todo/todo-delete.usecase";
+import ToDoGetAllUseCase from "src/use-cases/todo/todo-get-all.usecase";
+import ToDoGetByIdUseCase from "src/use-cases/todo/todo-get-by-id.usecase";
+import ToDoUpdateUseCase from "src/use-cases/todo/todo-update-by-id.usecase";
 
 export default class ToDoController {
-    static async getAll(req: Request, res: Response): Promise<Response<ToDoControllerResponse>> {
+    static async getAll(_: any, reply: any) {
         try {
-            const { success, data } = await new ToDoGetAllUseCase().execute(res.locals.userId);
-            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
-        } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+            const { success, data } = await new ToDoGetAllUseCase().execute();
+            if (success === true) return reply.send({ success: true, data });
+        } catch (error: any) {
+            return reply.send({ success: false, message: error.message });
         }
     }
 
-    static async getById(req: Request, res: Response): Promise<Response<ToDoControllerResponse>> {
+    static async getById(request: any, reply: any) {
         try {
-            const { todo_id } = req.params;
+            const { todo_id } = request.params;
             const { success, data } = await new ToDoGetByIdUseCase().execute(todo_id);
-            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
-        } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+            if (success === true) return reply.send({ success: true, data });
+        } catch (error: any) {
+            return reply.send({ success: false, message: error.message });
         }
     }
 
-    static async create(req: Request, res: Response): Promise<Response<ToDoControllerResponse>> {
+    static async create(request: any, reply: any) {
         try {
-            const { title, description, done } = req.body;
+            const { title, description, done } = request.body;
             const { success, data } = await new ToDoCreateUseCase().execute({
-                user_id: res.locals.userId,
                 title,
                 description,
                 done,
             });
-            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
-        } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+            if (success === true) reply.send({ success: true, data });
+        } catch (error: any) {
+            return reply.send({ success: false, message: error.message });
         }
     }
 
-    static async update(req: Request, res: Response): Promise<Response<ToDoControllerResponse>> {
+    static async update(request: any, reply: any) {
         try {
-            const { id, title, description, done } = req.body;
+            const { id, title, description, done } = request.body;
             const { success, data } = await new ToDoUpdateUseCase().execute({
                 id,
                 title,
                 description,
                 done,
             });
-            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
-        } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+            if (success === true) return reply.send({ success: true, data });
+        } catch (error: any) {
+            return reply.send({ success: false, message: error.message });
         }
     }
 
-    static async delete(req: Request, res: Response): Promise<Response<ToDoControllerResponse>> {
+    static async delete(request: any, reply: any) {
         try {
-            const { todo_id } = req.params;
+            const { todo_id } = request.params;
             const { success, data } = await new ToDoDeleteByIdUseCase().execute(todo_id);
-            if (success === true) return res.status(HttpStatusCode.OK).json({ success: true, data });
-        } catch (error) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, message: error.message });
+            if (success === true) return reply.send({ success: true, data });
+        } catch (error: any) {
+            return reply.send({ success: false, message: error.message });
         }
     }
 }

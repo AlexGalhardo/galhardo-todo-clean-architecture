@@ -1,33 +1,49 @@
 {
 	"compilerOptions": {
-		"target": "es2020",
-		"module": "esnext",
+		"allowSyntheticDefaultImports": true,
 		"allowJs": true,
-		"removeComments": true,
-		"resolveJsonModule": true,
-		"sourceMap": true,
-		"outDir": "dist",
-		"strict": false,
-		"baseUrl": ".",
-		"forceConsistentCasingInFileNames": true,
+		"declaration": true,
+		"baseUrl": "./",
 		"esModuleInterop": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"moduleResolution": "node",
+		"module": "commonjs",
+		"noImplicitAny": true,
+		"noImplicitReturns": false,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"outDir": ".build",
+		"rootDir": "./",
+		"resolveJsonModule": true,
 		"skipLibCheck": true,
-		"rootDirs": [
-			"src"
-		],
-		"lib": [
-			"es2020"
-		],
-		"types": [
-			"node"
-		]
+		"sourceMap": true,
+		"strict": true,
+		"target": "es2020",
+		"paths": {
+			"~/models/*": [
+				"./src/models/*"
+			],
+			"~/repositories/*": [
+				"./src/repositories/*"
+			],
+			"~/services/*": [
+				"./src/services/*"
+			],
+			"~/utils/*": [
+				"./src/utils/*"
+			]
+		}
 	},
+	"include": [
+		"src"
+	],
 	"exclude": [
 		"node_modules",
-		"./tests",
-		"./dist"
+		"node_modules/**/*",
+		".serverless/**/*",
+		".webpack/**/*",
+		"_warmup/**/*",
+		".vscode/**/*",
+		".idea/**/*",
+		"dist/**/*",
+		"tests/**/*"
 	]
 }

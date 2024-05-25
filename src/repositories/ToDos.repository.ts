@@ -1,60 +1,55 @@
 import { ToDo } from "@prisma/client";
 import { randomUUID } from "node:crypto";
 import prisma from "../config/prisma";
-import { ToDoCreateDTO } from "src/useCases/todo/ToDoCreate.useCase";
-import { ToDoUpdateDTO } from "src/useCases/todo/ToDoUpdate.useCase";
+import { ToDoCreateDTO } from "src/use-cases/todo/todo-create.usecase";
+import { ToDoUpdateDTO } from "src/use-cases/todo/todo-update-by-id.usecase";
 
 export interface ToDosRepositoryPort {
-    getAllByUserId(userId: string): Promise<ToDo[]>;
-    getById(id: string): Promise<ToDo>;
+    getAll(): Promise<ToDo[]>;
+    getById(id: string): Promise<ToDo | null>;
     create(todo: ToDoCreateDTO): Promise<ToDo>;
     update(todo: ToDoUpdateDTO): Promise<ToDo>;
     delete(id: string): Promise<ToDo>;
 }
 
 export default class ToDosRepository implements ToDosRepositoryPort {
-    async getAllByUserId(userId: string): Promise<ToDo[]> {
+    async getAll(): Promise<ToDo[]> {
         try {
-            return await prisma.toDo.findMany({
-                where: {
-                    user_id: userId,
-                },
-            });
-        } catch (error) {
+            return await prisma.toDo.findMany({});
+        } catch (error: any) {
             throw new Error(error);
         }
     }
 
-    async getById(toDoId: string): Promise<ToDo> {
+    async getById(id: string): Promise<ToDo | null> {
         try {
             return await prisma.toDo.findUnique({
                 where: {
-                    id: toDoId,
+                    id,
                 },
             });
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }
 
-    async create({ user_id, title, description, done }: ToDoCreateDTO): Promise<ToDo> {
+    async create({ title, description, done }: ToDoCreateDTO): Promise<ToDo> {
         try {
             return await prisma.toDo.create({
                 data: {
                     id: randomUUID(),
-                    user_id,
                     title,
                     description,
                     done,
                     created_at: new Date(),
                 },
             });
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }
 
-    async update({ id, title, description, done }): Promise<ToDo> {
+    async update({ id, title, description, done }: ToDoUpdateDTO): Promise<ToDo> {
         try {
             return await prisma.toDo.update({
                 where: {
@@ -66,7 +61,7 @@ export default class ToDosRepository implements ToDosRepositoryPort {
                     done,
                 },
             });
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }
@@ -78,7 +73,7 @@ export default class ToDosRepository implements ToDosRepositoryPort {
                     id,
                 },
             });
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
         }
     }
