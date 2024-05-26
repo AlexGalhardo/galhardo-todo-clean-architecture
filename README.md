@@ -25,19 +25,19 @@ chmod +x ./setup.sh && ./setup.sh
 ```
 
 ## JSON Databases
-- If you wanna JSON database, set in your `.env` file:
+- If you wanna use JSON database, set in your `.env` file:
 ```
 USE_JSON_DATABASE=true
 ```
 - If false, default database is PostgreSQL
 
 ## Integration Tests
-1. Run tests
+a. Run tests
 ```
 bun test
 ```
 
-1. Watch tests
+b. Watch tests
 ```
 bun --watch test
 ```
