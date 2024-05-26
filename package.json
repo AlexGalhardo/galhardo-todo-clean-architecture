@@ -4,7 +4,7 @@
     "dev": "bun --watch src/server.ts",
     "build": "bun build --compile --minify ./src/server.ts --outfile server",
     "format": "prettier --write \"src/**/*.ts\"",
-    "prepare": "npx husky install",
+    "prepare": "husky install",
     "test": "bun test",
     "test:watch": "bun --watch test"
   },
