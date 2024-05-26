@@ -17,7 +17,7 @@ fastify
 	.post("/todo", (request, reply) => ToDoController.create(request, reply))
 	.put("/todo/:id", (request, reply) => ToDoController.update(request, reply))
 	.delete("/todo/:id", (request, reply) => ToDoController.delete(request, reply))
-	.listen({ port: Number(process.env.PORT) ?? 3000 }, (err, _) => {
+	.listen({ port: Number(process.env.PORT) ?? 3000, host: '0.0.0.0' }, (err, _) => {
 		if (err) {
 			fastify.log.error(err);
 			process.exit(1);
