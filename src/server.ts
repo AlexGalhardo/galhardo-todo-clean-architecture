@@ -17,12 +17,12 @@ fastify
 	.post("/todo", (request, reply) => ToDoController.create(request, reply))
 	.put("/todo/:id", (request, reply) => ToDoController.update(request, reply))
 	.delete("/todo/:id", (request, reply) => ToDoController.delete(request, reply))
-	.listen({ port: Number(Bun.env.PORT) ?? 3000 }, (err, _) => {
+	.listen({ port: Number(process.env.PORT) ?? 3000 }, (err, _) => {
 		if (err) {
 			fastify.log.error(err);
 			process.exit(1);
 		}
 		console.log(
-			`\n\n 🚀 TODO API CLEAN ARCHITECTURE HTTP REST API server is running at http://localhost:${Number(Bun.env.PORT) ?? 3000}`,
+			`\n\n 🚀 TODO API CLEAN ARCHITECTURE HTTP REST API server is running at http://localhost:${Number(process.env.PORT) ?? 3000}`,
 		);
 	});
