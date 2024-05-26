@@ -42,6 +42,17 @@ b. Watch tests
 bun --watch test
 ```
 
+## Single file binary
+a. Creating build
+```
+bun run build
+```
+
+b. Executing single file binary
+```
+./server
+```
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
