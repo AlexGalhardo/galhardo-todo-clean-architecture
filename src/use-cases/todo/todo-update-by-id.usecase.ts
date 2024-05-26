@@ -11,7 +11,7 @@ export interface ToDoUpdateDTO {
 
 interface ToDoUpdateUseCaseResponse {
     success: boolean;
-    data: ToDo;
+    data?: ToDo;
 }
 
 interface ToDoUpdateUseCasePort {
@@ -30,7 +30,9 @@ export default class ToDoUpdateUseCase implements ToDoUpdateUseCasePort {
                 done,
             });
 
-            return { success: true, data: todoUpdated };
+            if (todoUpdated) return { success: true, data: todoUpdated };
+
+            return { success: false };
         } catch (error: any) {
             throw new Error(error);
         }

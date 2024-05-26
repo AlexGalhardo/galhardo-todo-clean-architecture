@@ -13,16 +13,16 @@ fastify
         }),
     )
     .get("/todo/all", (request, reply) => ToDoController.getAll(request, reply))
-    .get("/todo/:todo_id", (request, reply) => ToDoController.getById(request, reply))
+    .get("/todo/:id", (request, reply) => ToDoController.getById(request, reply))
     .post("/todo", (request, reply) => ToDoController.create(request, reply))
-    .put("/todo", (request, reply) => ToDoController.update(request, reply))
-    .delete("/todo/:todo_id", (request, reply) => ToDoController.delete(request, reply))
+    .put("/todo/:id", (request, reply) => ToDoController.update(request, reply))
+    .delete("/todo/:id", (request, reply) => ToDoController.delete(request, reply))
     .listen({ port: Number(Bun.env.PORT) ?? 3000 }, (err, _) => {
         if (err) {
             fastify.log.error(err);
             process.exit(1);
         }
         console.log(
-            `\n\n 🚀 TODO API CLEAN ARCHITECTURE HTTP REST API server is running at http://localhost:${Number(Bun.env.PORT) ?? 6666}`,
+            `\n\n 🚀 TODO API CLEAN ARCHITECTURE HTTP REST API server is running at http://localhost:${Number(Bun.env.PORT) ?? 3000}`,
         );
     });

@@ -1,5 +1,5 @@
-import PostgresTransactionsRepository, { ToDosRepositoryPort } from "../repositories/todos.repository";
+import ToDosRepository, { ToDosRepositoryPort } from "../repositories/todos.repository";
 
 export const getToDosRepository = (): ToDosRepositoryPort => {
-    return new PostgresTransactionsRepository();
+    return new ToDosRepository();
 };

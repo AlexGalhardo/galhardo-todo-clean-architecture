@@ -16,9 +16,10 @@ export default class ToDoController {
 
     static async getById(request: any, reply: any) {
         try {
-            const { todo_id } = request.params;
-            const { success, data } = await new ToDoGetByIdUseCase().execute(todo_id);
+            const { id } = request.params;
+            const { success, data } = await new ToDoGetByIdUseCase().execute(id);
             if (success === true) return reply.send({ success: true, data });
+            return reply.send({ success: false, message: "Todo not found" });
         } catch (error: any) {
             return reply.send({ success: false, message: error.message });
         }
@@ -40,14 +41,16 @@ export default class ToDoController {
 
     static async update(request: any, reply: any) {
         try {
-            const { id, title, description, done } = request.body;
+            const { id } = request.params;
+            const { title, description, done } = request.body;
             const { success, data } = await new ToDoUpdateUseCase().execute({
                 id,
                 title,
                 description,
                 done,
             });
-            if (success === true) return reply.send({ success: true, data });
+            if (success === true) return reply.send({ success: true, message: "Todo updated!", data });
+            return reply.send({ success: false, message: "Todo not found to update" });
         } catch (error: any) {
             return reply.send({ success: false, message: error.message });
         }
@@ -55,9 +58,10 @@ export default class ToDoController {
 
     static async delete(request: any, reply: any) {
         try {
-            const { todo_id } = request.params;
-            const { success, data } = await new ToDoDeleteByIdUseCase().execute(todo_id);
-            if (success === true) return reply.send({ success: true, data });
+            const { id } = request.params;
+            const { success, data } = await new ToDoDeleteByIdUseCase().execute(id);
+            if (success === true) return reply.send({ success: true, message: "Todo deleted!", data });
+            return reply.send({ success: false, message: "Todo not found to delete" });
         } catch (error: any) {
             return reply.send({ success: false, message: error.message });
         }

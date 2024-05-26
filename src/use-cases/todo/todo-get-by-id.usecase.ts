@@ -18,7 +18,7 @@ export default class ToDoGetByIdUseCase implements ToDoGetByIdUseCasePort {
         try {
             const todoFound = await this.toDosRepository.getById(toDoId);
             if (todoFound) return { success: true, data: todoFound };
-            return { success: false, data: undefined };
+            return { success: false };
         } catch (error: any) {
             throw new Error(error);
         }
