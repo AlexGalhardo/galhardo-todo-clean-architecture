@@ -1,6 +1,6 @@
 #!/bin/bash
 bun install
-cp .env.example .env
+docker stop $(docker ps -q) && docker rm $(docker ps -aq)
 docker-compose down
 docker-compose up -d
 bun prisma migrate dev
