@@ -85,4 +85,4 @@ bun run build
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) August 2023-present, [Alex Galhardo](https://github.com/AlexGalhardo)
+Copyright (c) May 2024-present, [Alex Galhardo](https://github.com/AlexGalhardo)
