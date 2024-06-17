@@ -18,9 +18,11 @@
     "@aws-sdk/client-sqs": "^3.598.0",
     "@faker-js/faker": "^8.4.1",
     "@prisma/client": "^5.15.0",
+    "@types/supertest": "^6.0.2",
     "bcrypt": "^5.1.1",
     "fastify": "^4.28.0",
     "jsonwebtoken": "^9.0.2",
+    "supertest": "^7.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

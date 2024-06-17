@@ -4,7 +4,7 @@
 		"declaration": true,
 		"baseUrl": "./",
 		"esModuleInterop": true,
-		"noImplicitAny": true,
+		"noImplicitAny": false,
 		"noImplicitReturns": false,
 		"outDir": ".build",
 		"rootDir": "./",
