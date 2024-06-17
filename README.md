@@ -4,10 +4,22 @@
 
 ## Introduction
 
-* A simple REST API made with Bun, PrismaORM, PostgreSQL and Fastify, using Clean Architecture principles I build while reading the book [Arquitetura Limpa Na Prática - Otávio Lemos](https://www.otaviolemos.com.br/)
+- A simple ToDo REST API using Clean Architecture principles I build while reading the book [Arquitetura Limpa Na Prática - Otávio Lemos](https://www.otaviolemos.com.br/)
+- Tools & Features:
+   - Bun & Typescript
+   - Localstack simulating AWS S3, SQS and SNS
+   - Telegram Logger
+   - Unit and Integration Tests using native Bun Test suite
+   - Docker Compose
+   - PrismaORM
+   - Binary created by bun build
 
 
 ## Development Setup Local
+
+Prerequisites:
+   - Install Bun: <https://bun.sh/docs/installation>
+   - Install Localstack: <https://docs.localstack.cloud/getting-started/installation/>
 
 1. Clone repository
 ```

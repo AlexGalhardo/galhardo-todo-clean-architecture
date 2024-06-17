@@ -1,5 +1,5 @@
-# POST http://localhost:3000/todo
-POST todo-api-clean-architecture.alexgalhardo.com
+POST http://localhost:3000/todo
+# POST todo-api-clean-architecture.alexgalhardo.com/todo
 Content-Type: application/json
 
 {

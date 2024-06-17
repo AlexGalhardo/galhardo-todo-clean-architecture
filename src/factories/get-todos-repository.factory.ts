@@ -1,5 +1,5 @@
-import ToDosRepository, { ToDosRepositoryPort } from "../repositories/todos.repository";
+import ToDosRepository, { type ToDosRepositoryPort } from "../repositories/todos.repository";
 
 export const getToDosRepository = (): ToDosRepositoryPort => {
-    return new ToDosRepository();
+	return new ToDosRepository();
 };

@@ -1,22 +1,37 @@
 {
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-		"allowJs": true,
 		"declaration": true,
 		"baseUrl": "./",
 		"esModuleInterop": true,
-		"module": "commonjs",
 		"noImplicitAny": true,
 		"noImplicitReturns": false,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
 		"outDir": ".build",
 		"rootDir": "./",
 		"resolveJsonModule": true,
-		"skipLibCheck": true,
 		"sourceMap": true,
+		// Enable latest features
+		"lib": [
+			"ESNext"
+		],
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleDetection": "force",
+		"jsx": "react-jsx",
+		"allowJs": true,
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"noEmit": true,
+		// Best practices
 		"strict": true,
-		"target": "es2020",
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		// Some stricter flags (disabled by default)
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noPropertyAccessFromIndexSignature": false,
 		"paths": {
 			"~/models/*": [
 				"./src/models/*"
