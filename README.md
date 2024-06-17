@@ -20,6 +20,7 @@
 - [ ] Consume messages/notifications from LocalStack AWS SQS and AWS SNS
 - [x] Create Integration tests using Bun Test suite
 - [ ] Create Unit tests using mocks from Bun Test suite
+- [x] Validate all requests payloads using Zod
 - [x] Use TelegramLogger to send logs to Telegram
 - [ ] Save JSON Database on LocalStack AWS S3 every time it's updated
 - [x] Create binary file with bun build
